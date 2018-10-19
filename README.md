@@ -5,7 +5,7 @@
 This tool is designed to diagnose errors by tailing the log file. It is a stand alone java application with less memory footprint.
 
 ## Structure
-# Logtailor
+### Logtailor
 
 ## Requirement
 
