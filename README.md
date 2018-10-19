@@ -12,6 +12,7 @@ This tool is designed to diagnose errors by tailing the log file. It is a stand 
 
 ## Structure and Functionalities
 ### Logtailor
+[Apache.Commons.Tailor](https://commons.apache.org/proper/commons-io/javadocs/api-2.4/org/apache/commons/io/input/Tailer.html) implmentation to tail the log file. It uses file channel to read the data from the log file and load the data into byte buffer.
 
 ### MatchRuleEngine
 
