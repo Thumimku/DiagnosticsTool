@@ -26,7 +26,6 @@ import java.io.IOException;
  * PostExecutor interface is implemented for code reuse.
  *
  * @author thumilan@wso2.com
- * @see PostExecutor
  */
 public class LogLineWriter {
 

@@ -25,7 +25,6 @@ package org.wso2.carbon.diagnostics.actionexecutor;
  * PostExecutor interface is implemented for code reuse.
  *
  * @author thumilan@wso2.com
- * @see PostExecutor
  */
 public class PrintLineExecutor {
 
