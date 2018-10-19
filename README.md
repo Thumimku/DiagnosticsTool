@@ -32,28 +32,34 @@ Classes which extend Action executor abstract class can be used as ActionExecuto
 
 ### PostActionExecutors
 
-Currently zipFileexecutor is the only one post action executor which used to file the diagnostics reults folder.
+Currently ZipFileExecutor is the only one post action executor which used to file the diagnostics reults folder.
 
 ### RegexTree and RegexNode
 
 ![alt text](https://github.com/Thumimku/DiagnosticsTool/blob/master/img/RegexTree.jpg "Logo Title Text 1")
 
+Regex Tree is built up in tool start up phase. It used as a static memory. Json file configuration is given below.
 
 ## Extensibility
 
-
+*User can extend the tree by adding nodes by giving proper regex as path.
+*User can add one or more diagnostic action executors to both leaf nodes and non leaf nodes.
+*User can add one or more regex pattern as path between parent node and child node.\
+*User can add ActionExecutors.
 
 
 
 ## Current Progress
 
-- Application can detect error logs in real time and write it in a seperate file for further research.
-- Whenever error detected application do `Thread Dump` and save thread dumps in same folder of log line.
-- Finally application zip the entire folder of error log and thread dumps.
 
 ## How to Configure Json File
 
 ## How to run
+
+*Clone the project
+*Build the project using maven clean install
+*Go to OnBoardDiagnostics/org.wso2.carbon.diagnostics.application/target
+*run jar file 
 
 
 ## Run the Application
