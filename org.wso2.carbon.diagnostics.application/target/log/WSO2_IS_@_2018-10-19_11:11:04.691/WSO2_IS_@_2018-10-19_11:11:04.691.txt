@@ -1,0 +1,10 @@
+TID: [-1234] [] [2018-10-19 11:11:04,680] ERROR {org.apache.catalina.core.StandardWrapperValve} -  Servlet.service() for servlet [jsp] in context with path [/STRATOS_ROOT] threw exception [javax.servlet.ServletException: java.lang.ThreadDeath] with root cause 
+java.lang.ThreadDeath
+	at java.lang.Thread.stop(Thread.java:853)
+	at org.wso2.carbon.tomcat.ext.valves.CarbonStuckThreadDetectionValve.handleStuckThread(CarbonStuckThreadDetectionValve.java:125)
+	at org.wso2.carbon.tomcat.ext.valves.CarbonStuckThreadDetectionValve.backgroundProcess(CarbonStuckThreadDetectionValve.java:178)
+	at org.apache.catalina.core.ContainerBase.backgroundProcess(ContainerBase.java:1494)
+	at org.apache.catalina.core.ContainerBase$ContainerBackgroundProcessor.processChildren(ContainerBase.java:1671)
+	at org.apache.catalina.core.ContainerBase$ContainerBackgroundProcessor.processChildren(ContainerBase.java:1681)
+	at org.apache.catalina.core.ContainerBase$ContainerBackgroundProcessor.run(ContainerBase.java:1649)
+	at java.lang.Thread.run(Thread.java:748)

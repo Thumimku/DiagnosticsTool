@@ -1,4 +1,4 @@
 Manifest-Version: 1.0
 Class-Path: /lib/json-simple-1.1.1.jar
-Main-Class: com.company.Main
+Main-Class: com.company.application.Application
 

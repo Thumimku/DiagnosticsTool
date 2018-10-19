@@ -1,0 +1,3 @@
+org/wso2/carbon/diagnostics/logtailor/TailerListener.class
+org/wso2/carbon/diagnostics/logtailor/Tailer.class
+org/wso2/carbon/diagnostics/logtailor/TailerListenerAdapter.class

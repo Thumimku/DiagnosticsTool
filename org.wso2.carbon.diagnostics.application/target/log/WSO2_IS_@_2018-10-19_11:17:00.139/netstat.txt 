@@ -1,0 +1,26 @@
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State      
+tcp        0      0 *:10389                 *:*                     LISTEN     
+tcp        0      0 thumilan-ThinkPa:domain *:*                     LISTEN     
+tcp        0      0 172.17.0.1:10711        *:*                     LISTEN     
+tcp        0      0 localhost:ipp           *:*                     LISTEN     
+tcp        0      0 *:35959                 *:*                     LISTEN     
+tcp        0      0 *:41947                 *:*                     LISTEN     
+tcp        0      0 *:afs3-volser           *:*                     LISTEN     
+tcp        0      0 localhost:6942          *:*                     LISTEN     
+tcp        0      0 localhost:33729         *:*                     LISTEN     
+tcp        0      0 *:9443                  *:*                     LISTEN     
+tcp        0      0 *:9763                  *:*                     LISTEN     
+tcp        0      0 *:42469                 *:*                     LISTEN     
+tcp        0      0 *:11111                 *:*                     LISTEN     
+tcp        0      0 localhost:63342         *:*                     LISTEN     
+tcp        0      0 *:9999                  *:*                     LISTEN     
+tcp6       0      0 ip6-localhost:ipp       [::]:*                  LISTEN     
+tcp6       0      0 [::]:8090               [::]:*                  LISTEN     
+tcp6       0      0 localhost:6173          [::]:*                  LISTEN     
+tcp6       0      0 [::]:amanda             [::]:*                  LISTEN     
+tcp6       0      0 localhost:8005          [::]:*                  LISTEN     
+tcp6       0      0 [::]:8009               [::]:*                  LISTEN     
+tcp6       0      0 [::]:mysql              [::]:*                  LISTEN     
+tcp6       0      0 [::]:36845              [::]:*                  LISTEN     
+tcp6       0      0 [::]:http-alt           [::]:*                  LISTEN     

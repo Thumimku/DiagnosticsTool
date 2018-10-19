@@ -3,10 +3,16 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.company</groupId>
-    <artifactId>OnboardDiagnostics</artifactId>
+    <groupId>org.wso2.carbon</groupId>
+    <artifactId>onboard-diagnosis-tool</artifactId>
     <version>1.0snapshot</version>
-    <packaging>jar</packaging>
+    <modules>
+        <module>org.wso2.carbon.diagnostics.application</module>
+        <module>org.wso2.carbon.diagnostics.actionexecutor</module>
+        <module>org.wso2.carbon.diagnostics.logtailor</module>
+        <module>org.wso2.carbon.diagnostics.regextree</module>
+    </modules>
+    <packaging>pom</packaging>
 
     <dependencies>
         <!-- https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple -->
@@ -15,12 +21,6 @@
             <artifactId>json-simple</artifactId>
             <version>1.1.1</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.json.wso2/json -->
-        <!--<dependency>-->
-            <!--<groupId>org.json.wso2</groupId>-->
-            <!--<artifactId>json</artifactId>-->
-            <!--<version>3.0.0.wso2v1</version>-->
-        <!--</dependency>-->
 
 
     </dependencies>
@@ -54,7 +54,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>libs/</classpathPrefix>
-                            <mainClass>com.company.Main</mainClass>
+                            <mainClass>org.wso2.carbon.diagnostics.application.Application</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/OnboardDiagnostics.iml" filepath="$PROJECT_DIR$/OnboardDiagnostics.iml" />
+      <module fileurl="file://$PROJECT_DIR$/org.wso2.carbon.diagnostic.r.egextree/org.wso2.carbon.diagnostic.regextree.iml" filepath="$PROJECT_DIR$/org.wso2.carbon.diagnostic.r.egextree/org.wso2.carbon.diagnostic.regextree.iml" />
+      <module fileurl="file://$PROJECT_DIR$/org.wso2.carbon.diagnostics.actionexecutor/org.wso2.carbon.diagnostics.actionexecutor.iml" filepath="$PROJECT_DIR$/org.wso2.carbon.diagnostics.actionexecutor/org.wso2.carbon.diagnostics.actionexecutor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/org.wso2.carbon.diagnostics.application/org.wso2.carbon.diagnostics.application.iml" filepath="$PROJECT_DIR$/org.wso2.carbon.diagnostics.application/org.wso2.carbon.diagnostics.application.iml" />
+      <module fileurl="file://$PROJECT_DIR$/org.wso2.carbon.diagnostics.logtailor/org.wso2.carbon.diagnostics.logtailor.iml" filepath="$PROJECT_DIR$/org.wso2.carbon.diagnostics.logtailor/org.wso2.carbon.diagnostics.logtailor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/org.wso2.carbon.diagnostics.regextree/org.wso2.carbon.diagnostics.regextree.iml" filepath="$PROJECT_DIR$/org.wso2.carbon.diagnostics.regextree/org.wso2.carbon.diagnostics.regextree.iml" />
+    </modules>
+  </component>
+</project>
