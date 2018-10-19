@@ -42,10 +42,10 @@ Regex Tree is built up in tool start up phase. It used as a static memory. Json 
 
 ## Extensibility
 
-*User can extend the tree by adding nodes by giving proper regex as path.
-*User can add one or more diagnostic action executors to both leaf nodes and non leaf nodes.
-*User can add one or more regex pattern as path between parent node and child node.\
-*User can add ActionExecutors.
+- User can extend the tree by adding nodes by giving proper regex as path.
+- User can add one or more diagnostic action executors to both leaf nodes and non leaf nodes.
+- User can add one or more regex pattern as path between parent node and child node.\
+- User can add ActionExecutors.
 
 
 
@@ -56,10 +56,10 @@ Regex Tree is built up in tool start up phase. It used as a static memory. Json 
 
 ## How to run
 
-*Clone the project
-*Build the project using maven clean install
-*Go to OnBoardDiagnostics/org.wso2.carbon.diagnostics.application/target
-*run jar file 
+- Clone the project
+- Build the project using maven clean install
+- Go to OnBoardDiagnostics/org.wso2.carbon.diagnostics.application/target
+- run jar file 
 
 
 ## Run the Application
