@@ -1,8 +1,11 @@
-# OnBoard Diagnostics Tool for IS
+# Diagnostics Tool 
 
 ## About
 
-This tool is designed to diagnose errors and malicious flows in WSO2-Identity Server. It is a standalone application with small memory foot print (%CPU – 6 % and %MEM – 3.4 %). Currently in developing phase.
+This tool is designed to diagnose errors by tailing the log file. It is a stand alone java application with less memory footprint.
+
+## Structure
+# Logtailor
 
 ## Requirement
 
@@ -17,8 +20,7 @@ This tool is designed to diagnose errors and malicious flows in WSO2-Identity Se
 - Whenever error detected application do `Thread Dump` and save thread dumps in same folder of log line.
 - Finally application zip the entire folder of error log and thread dumps.
 
-## Configure wso2conf.xml
-
+## How to Configure Json File
 Inorder to run the application first program needs wsocarbon.log path and wso2carbon.pid path
 - Set wso2carbon.log path
   - open wso2conf.xml (src/resources/wsp2conf.xml)
