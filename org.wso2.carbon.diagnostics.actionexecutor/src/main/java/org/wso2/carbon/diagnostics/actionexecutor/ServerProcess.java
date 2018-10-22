@@ -1,4 +1,4 @@
-package org.wso2.carbon.diagnostics.actionexecutor.diagnosticCommand;
+package org.wso2.carbon.diagnostics.actionexecutor;
 /*
  * Copyright (c) 2005-2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
@@ -17,10 +17,6 @@ package org.wso2.carbon.diagnostics.actionexecutor.diagnosticCommand;
  *  under the License.
  */
 
-
-
-
-
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
@@ -32,18 +28,16 @@ import java.io.RandomAccessFile;
 public class ServerProcess {
 
     //private process id
-    public static String processId;
+     static String processId;
 
-    public static String processFilePath;
-
-
+     static String processFilePath;
 
     /**
      * Getter method for processId.
      *
      * @return String processId
      */
-    public static String getProcessId() {
+     static String getProcessId() {
 
         if ((processId == null) || notAlive()) {
 
@@ -55,15 +49,15 @@ public class ServerProcess {
     }
 
     public static void setProcessId(String path) {
-        RandomAccessFile file = null;
-        processFilePath=path;
+
+        RandomAccessFile file;
+        processFilePath = path;
         try {
             // read the process id from the wso2carbon.pid file
             file = new RandomAccessFile(path, "r");
             processId = file.readLine();
         } catch (IOException e) {
             System.out.print("wso2carbon.pid file is Not Found.");
-            System.out.print("Please Check the Access Permission and pidpath in wso2conf.xml");
         }
     }
 
@@ -72,7 +66,7 @@ public class ServerProcess {
      *
      * @return Boolean isAlive()
      */
-    public static boolean notAlive() {
+     static boolean notAlive() {
 
         try {
 

@@ -1,4 +1,4 @@
-package org.wso2.carbon.diagnostics.actionexecutor.diagnosticCommand;
+package org.wso2.carbon.diagnostics.actionexecutor;
 /*
  * Copyright (c) 2005-2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
@@ -34,7 +34,7 @@ public class NetstatExecuter extends ActionExecutor {
     /**
      * Method used to do memory dump with using Java Runtime Environment and jmap command.
      *
-     * @param filepath
+     * @param filepath file path of the dump folder
      */
     @Override
     public void execute(String filepath) {

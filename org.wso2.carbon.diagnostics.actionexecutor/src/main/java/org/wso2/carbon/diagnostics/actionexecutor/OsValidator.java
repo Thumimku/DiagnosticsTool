@@ -18,31 +18,34 @@ package org.wso2.carbon.diagnostics.actionexecutor;
  */
 
 /**
- * PrintLineExecutor used to print the logLines into the console.
- * Currently this class designed as a Singleton class inorder to optimise CPU usage.
- * Further research is required to change the design.
- * <p>
- * PostExecutor interface is implemented for code reuse.
- *
- * @author thumilan@wso2.com
+ * This class is used to check which OS is the tool running on.
  */
-public class PrintLineExecutor {
+public class OsValidator {
 
-    /**
-     * public Constructor.
-     */
-    public PrintLineExecutor() {
+    private static String os = System.getProperty("os.name").toLowerCase();
+
+     static boolean isWindows() {
+
+        return (os.contains("win"));
 
     }
 
-    /**
-     * override method used to print the logLines.
-     *
-     * @param logLine the line
-     */
+     static boolean isMac() {
 
-    public void execute(StringBuilder logLine, String path) {
+        return (os.contains("mac"));
 
-        System.out.print(logLine + "\n");
     }
+
+     static boolean isUnix() {
+
+        return (os.contains("nix") || os.contains("nux") || os.contains("aix"));
+
+    }
+
+     static boolean isSolaris() {
+
+        return (os.contains("sunos"));
+
+    }
+
 }

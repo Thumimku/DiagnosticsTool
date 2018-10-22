@@ -1,5 +1,4 @@
-package org.wso2.carbon.diagnostics.actionexecutor.diagnosticCommand;
-
+package org.wso2.carbon.diagnostics.actionexecutor.postexecutor;
 /*
  * Copyright (c) 2005-2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
@@ -18,30 +17,32 @@ package org.wso2.carbon.diagnostics.actionexecutor.diagnosticCommand;
  *  under the License.
  */
 
-import org.wso2.carbon.diagnostics.regextree.RegexNode;
-
 /**
- * All action executors should implements this interface.
- * This interface provides abstract execution method which used by executors to do their executions.
+ * PrintLineExecutor used to print the logLines into the console.
+ * Currently this class designed as a Singleton class inorder to optimise CPU usage.
+ * Further research is required to change the design.
+ * <p>
+ * PostExecutor interface is implemented for code reuse.
  *
+ * @author thumilan@wso2.com
  */
-public abstract class ActionExecutor {
+public class PrintLineExecutor {
 
     /**
-     * This method called by executor to do the execution.
+     * public Constructor.
      */
-    RegexNode root;
+    public PrintLineExecutor() {
 
-    public abstract void execute(String folderpath);
-
-    public RegexNode getRoot() {
-
-        return root;
     }
 
-    public void setRoot(RegexNode root) {
+    /**
+     * override method used to print the logLines.
+     *
+     * @param logLine the line
+     */
 
-        this.root = root;
+    public void execute(StringBuilder logLine, String path) {
+
+        System.out.print(logLine + "\n");
     }
-
 }

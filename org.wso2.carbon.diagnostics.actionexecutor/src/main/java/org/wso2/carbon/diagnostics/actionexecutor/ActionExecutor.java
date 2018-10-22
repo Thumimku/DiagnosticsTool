@@ -1,4 +1,5 @@
-package org.wso2.carbon.diagnostics.actionexecutor.diagnosticCommand;
+package org.wso2.carbon.diagnostics.actionexecutor;
+
 /*
  * Copyright (c) 2005-2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
@@ -17,35 +18,30 @@ package org.wso2.carbon.diagnostics.actionexecutor.diagnosticCommand;
  *  under the License.
  */
 
+import org.wso2.carbon.diagnostics.regextree.RegexNode;
+
 /**
- * This class is used to check which OS is the tool running on.
+ * All action executors should implements this interface.
+ * This interface provides abstract execution method which used by executors to do their executions.
+ *
  */
-public class OsValidator {
+public abstract class ActionExecutor {
 
-    private static String OS = System.getProperty("os.name").toLowerCase();
+    /**
+     * This method called by executor to do the execution.
+     */
+    RegexNode root;
 
-    public static boolean isWindows() {
+    public abstract void execute(String folderpath);
 
-        return (OS.contains("win"));
+    public RegexNode getRoot() {
 
+        return root;
     }
 
-    public static boolean isMac() {
+     void setRoot(RegexNode root) {
 
-        return (OS.contains("mac") );
-
-    }
-
-    public static boolean isUnix() {
-
-        return (OS.contains("nix") || OS.contains("nux")  || OS.contains("aix"));
-
-    }
-
-    public static boolean isSolaris() {
-
-        return (OS.contains("sunos"));
-
+        this.root = root;
     }
 
 }

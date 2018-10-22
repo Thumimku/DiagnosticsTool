@@ -1,4 +1,4 @@
-package org.wso2.carbon.diagnostics.actionexecutor;
+package org.wso2.carbon.diagnostics.actionexecutor.postexecutor;
 /*
  * Copyright (c) 2005-2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
@@ -68,19 +68,24 @@ public class ZipFileExecutor {
      *
      * @param srcFolder   file which needed to zip.
      * @param destZipFile destination path of zip folder.
-     * @throws Exception
+     * @throws Exception throw a exception
      */
-    private void zipFolder(String srcFolder, String destZipFile) throws Exception {
+    private void zipFolder(String srcFolder, String destZipFile) {
 
-        ZipOutputStream zip = null;
-        FileOutputStream fileWriter = null;
+        ZipOutputStream zip;
+        FileOutputStream fileWriter;
+        try {
+            fileWriter = new FileOutputStream(destZipFile); // set file output stream
+            zip = new ZipOutputStream(fileWriter);
 
-        fileWriter = new FileOutputStream(destZipFile); // set file output stream
-        zip = new ZipOutputStream(fileWriter);
+            addFolderToZip("", srcFolder, zip);
 
-        addFolderToZip("", srcFolder, zip);
-        zip.flush();
-        zip.close();
+            zip.flush();
+            zip.close();
+        } catch (Exception e) {
+
+        }
+
     }
 
     /**
@@ -116,12 +121,14 @@ public class ZipFileExecutor {
      * @param path      destination  path of the folder.
      * @param srcFolder source path of the folder.
      * @param zip       ZipOutputStream
-     * @throws Exception
+     * @throws Exception throw exception to parent method
      */
     private void addFolderToZip(String path, String srcFolder, ZipOutputStream zip)
             throws Exception {
 
         File folder = new File(srcFolder);
+
+
 
         for (String fileName : folder.list()) {
             if (path.equals("")) {

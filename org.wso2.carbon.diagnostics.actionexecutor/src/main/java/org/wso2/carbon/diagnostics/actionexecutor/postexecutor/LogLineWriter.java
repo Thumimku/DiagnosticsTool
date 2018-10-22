@@ -1,4 +1,4 @@
-package org.wso2.carbon.diagnostics.actionexecutor;
+package org.wso2.carbon.diagnostics.actionexecutor.postexecutor;
 /*
  * Copyright (c) 2005-2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
@@ -52,7 +52,7 @@ public class LogLineWriter {
             writer.write(logLine);
             writer.close();
         } catch (IOException e) {
-
+            System.out.print("exeception");
         }
 
     }

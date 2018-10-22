@@ -1,4 +1,4 @@
-package org.wso2.carbon.diagnostics.actionexecutor.diagnosticCommand;
+package org.wso2.carbon.diagnostics.actionexecutor;
 /*
  * Copyright (c) 2005-2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
@@ -28,8 +28,6 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class ActionExecutorFactory {
 
-
-
     /**
      * This Method used to create Executor objects.
      *
@@ -39,21 +37,22 @@ public class ActionExecutorFactory {
     public ActionExecutor getActionExecutor(String executorType, RegexNode root) {
 
         try {
-            String classnameShell = "org.wso2.carbon.diagnostics.actionexecutor.diagnosticCommand.";
+            String classnameShell = "org.wso2.carbon.diagnostics.actionexecutor.";
+            Object tempObject = Class.forName(classnameShell + executorType).getConstructor().newInstance();
 
-            ActionExecutor actionExecutor= (ActionExecutor) Class.forName(classnameShell + executorType).getConstructor().newInstance();
+            ActionExecutor actionExecutor = (ActionExecutor) tempObject;
             actionExecutor.setRoot(root);
             return actionExecutor;
         } catch (NoSuchMethodException e) {
             System.out.print("Invalid executor configured as " + executorType + " . Unable to load the class");
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            System.out.print("exception");
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            System.out.print("exception");
         } catch (InstantiationException e) {
-            e.printStackTrace();
+            System.out.print("exception");
         } catch (InvocationTargetException e) {
-            e.printStackTrace();
+            System.out.print("exception");
         }
 
         return null;

@@ -1,4 +1,4 @@
-package org.wso2.carbon.diagnostics.actionexecutor.diagnosticCommand;
+package org.wso2.carbon.diagnostics.actionexecutor;
 /*
  * Copyright (c) 2005-2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
@@ -51,14 +51,15 @@ public class MemoryDumper extends ActionExecutor {
     /**
      * Method used to do memory dump with using Java Runtime Environment and jmap command.
      *
-     * @param filepath
+     * @param filepath file path of the dump folder
      */
     @Override
     public void execute(String filepath) {
 
         if (new File(filepath).exists()) { // check whether file exists before dumping.
             String filename = "/heap-dump.hprof ";
-            String frame = System.getenv("JAVA_HOME") + "/bin/jmap -dump:live,format=b,file=" + filepath + filename + serverProcess;
+            String prefix = System.getenv("JAVA_HOME") + "/bin/jmap -dump:live,format=b,file=";
+            String frame = prefix + filepath + filename + serverProcess;
             try {
                 Runtime.getRuntime().exec(frame);
                 System.out.print("\t Memory Dump Successfully Dumped.\n");

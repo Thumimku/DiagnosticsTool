@@ -1,4 +1,4 @@
-package org.wso2.carbon.diagnostics.actionexecutor.diagnosticCommand;
+package org.wso2.carbon.diagnostics.actionexecutor;
 /*
  * Copyright (c) 2005-2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
@@ -48,7 +48,7 @@ public class OpenFileFinder extends ActionExecutor {
     /**
      * Method used to do memory dump with using Java Runtime Environment and jmap command.
      *
-     * @param filepath
+     * @param filepath file path of dump folder
      */
     @Override
     public void execute(String filepath) {
@@ -59,7 +59,7 @@ public class OpenFileFinder extends ActionExecutor {
             System.out.print("\t lsof successfully Done.\n");
 
             try {
-                if (command != null) {
+
                     Process process = Runtime.getRuntime().exec(command);
                     Scanner scanner = new Scanner(process.getInputStream(), "IBM850");
                     scanner.useDelimiter("\\A");
@@ -71,9 +71,7 @@ public class OpenFileFinder extends ActionExecutor {
                         System.out.print("Unable to do write in file in netstat");
                     }
                     scanner.close();
-                } else {
-                    System.out.print("Unable to detect the OS");
-                }
+
 
                 //System.out.print(command);
             } catch (IOException e) {

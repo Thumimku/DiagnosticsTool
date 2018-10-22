@@ -1,4 +1,4 @@
-package org.wso2.carbon.diagnostics.actionexecutor.diagnosticCommand;
+package org.wso2.carbon.diagnostics.actionexecutor;
 /*
  * Copyright (c) 2005-2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
@@ -62,7 +62,7 @@ public class ThreadDumper extends ActionExecutor {
      * @param processid process id which used for thread dumping
      * @param delay     delay between two thread dumps
      */
-    public ThreadDumper(String processid, long delay) {
+     ThreadDumper(String processid, long delay) {
 
         this(processid, delay, 5);
 
@@ -89,7 +89,7 @@ public class ThreadDumper extends ActionExecutor {
      * @param delay           delay between two thread dumps
      * @param threadDumpCount number of threadDumps.
      */
-    public ThreadDumper(String processid, long delay, int threadDumpCount) {
+     ThreadDumper(String processid, long delay, int threadDumpCount) {
 
         if (processid != null && delay > 999 && threadDumpCount > 3) {
             this.processid = processid;
@@ -113,7 +113,7 @@ public class ThreadDumper extends ActionExecutor {
      * Method used to do thread dump with using Java Runtime Environment and jstack command.
      * Currently its written for linux environment.
      *
-     * @param folderpath
+     * @param folderpath folder path of the dump folder
      */
     @Override
     public void execute(String folderpath) {
