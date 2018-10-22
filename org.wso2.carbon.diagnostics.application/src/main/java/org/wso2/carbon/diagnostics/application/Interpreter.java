@@ -23,12 +23,11 @@ import org.wso2.carbon.diagnostics.actionexecutor.LogLineWriter;
 import org.wso2.carbon.diagnostics.actionexecutor.ZipFileExecutor;
 import org.wso2.carbon.diagnostics.actionexecutor.diagnosticCommand.ActionExecutor;
 import org.wso2.carbon.diagnostics.actionexecutor.diagnosticCommand.ActionExecutorFactory;
-import org.wso2.carbon.diagnostics.regextree.ErrorRegexNode;
-import org.wso2.carbon.diagnostics.regextree.ErrorRegexTree;
+import org.wso2.carbon.diagnostics.regextree.RegexNode;
+import org.wso2.carbon.diagnostics.regextree.RegexTree;
 
 import java.io.File;
 import java.sql.Timestamp;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -37,7 +36,6 @@ import java.util.regex.Pattern;
  * Whenever there is error occur in Wso2server MatchRuleEngine detects it.
  * It invokes the methods of this class's instance.
  * This class is used to interpret the error and do appropriate actions for that error.
- * <p>
  * Example error scenario :-
  * When an error occurs interpreter instance create a new folder name as current Time stamp.
  * Then let threadDumper do thread dumper in that folder.
@@ -45,7 +43,7 @@ import java.util.regex.Pattern;
  *
  * @author thumilan@wso2.com
  */
-public class Interpreter {
+ class Interpreter {
 
     private ActionExecutorFactory actionExecutorFactory; // ActionExecutorFactory to create executor objects
 
@@ -56,9 +54,9 @@ public class Interpreter {
 
     private  Hashtable <String,Integer> actioexecutorLastTime;
 
-    private ErrorRegexNode root;
+    private RegexNode root;
 
-    private ErrorRegexTree regexTree;
+    private RegexTree regexTree;
     private int count;
 
 
@@ -68,7 +66,7 @@ public class Interpreter {
      * Current action executor is set as zipFile executor
      * This constructor calls createFolder to create the Thread Dump folder and do thread dump.
      */
-    public Interpreter(ErrorRegexTree regexTree) {
+     Interpreter(RegexTree regexTree) {
 
         this.actionExecutorFactory = new ActionExecutorFactory();
         createLogFolder();
@@ -85,10 +83,11 @@ public class Interpreter {
      * Valid error log lines will go under diagnosis process.
      * If the diagnosis succeeds then certain dump files and error log line will be dumped at time stamped folder.
      *
-     * @param logLine error log line
+     * @param log error log line
      */
-    public void interpret(StringBuilder logLine) {
+     void interpret(StringBuilder log) {
 
+        String logLine = log.toString();
         //First check whether the error line is valid or not.
         if (this.checkValidity(logLine)) {
             //If it is a valid error then diagnose it.
@@ -115,22 +114,22 @@ public class Interpreter {
      * Finally do the analysis.
      *
      * @param logLine error line
-     * @return
+     *
      */
-    private void diagnoseError(StringBuilder logLine) {
+    private void diagnoseError(String logLine) {
 
 
 
-        ErrorRegexNode errorNode = regexTree.findDiagnosis(logLine);
+        RegexNode errorNode = regexTree.findDiagnosis(logLine);
 
-        if((errorNode.diagnosis)!=null){
-            JSONArray diagnosisArray = errorNode.diagnosis;
-            System.out.print(count+" : "+errorNode.Description+"\n");
+        if((errorNode.getDiagnosis())!=null){
+            JSONArray diagnosisArray = errorNode.getDiagnosis();
+            System.out.print(count+" : "+errorNode.getDescription()+"\n");
             count++;
             this.createFolder();
-            if(this.doAnalysis(diagnosisArray,logLine.toString())){
+            if(this.doAnalysis(diagnosisArray,logLine)){
 
-                this.writeLogLine(logLine.toString());
+                this.writeLogLine(logLine);
                 this.executeZipFileExecuter();
 //                    this.deleteFolder();
             }else {
@@ -153,7 +152,7 @@ public class Interpreter {
         boolean analysed =  false;
         for (Object object : diagnoseArray) {
             JSONObject errorJsonObject = (JSONObject) object;
-            if(checkActionExecutorReloadTime(logLine,errorJsonObject.get("Executor").toString(),root.getActionexecutorReloadTime().get(errorJsonObject.get("Executor").toString()))){
+            if(checkActionExecutorReloadTime(logLine,errorJsonObject.get("Executor").toString(),root.getactionExecutorReloadTime().get(errorJsonObject.get("Executor").toString()))){
                 ActionExecutor actionExecutor = actionExecutorFactory.getActionExecutor(errorJsonObject.get("Executor").toString(),root);
                 if (actionExecutor != null) {
                     actionExecutor.execute(this.folderpath);
@@ -173,11 +172,11 @@ public class Interpreter {
      * This method used to check validity of the error.
      *
      * @param logLine error log
-     * @return
+     * @return validity of the error.
      */
-    private boolean checkValidity(StringBuilder logLine) {
+    private boolean checkValidity(String logLine) {
 
-        return ((logLine.toString().split("\n")).length > 2);
+        return ((logLine.split("\n")).length > 2);
     }
 
     /**
@@ -225,24 +224,24 @@ public class Interpreter {
         File dumpFolder = new File(folderpath + foldername);
         if (!dumpFolder.exists()) {
             try {
-                dumpFolder.mkdir(); // create folder if not exists.
+                if (dumpFolder.mkdir()){
+                    folderpath = folderpath + foldername; // create folder if not exists.
+                }
 
-                folderpath = folderpath + foldername;
+
             } catch (SecurityException se) {
                 //handle it
                 System.out.print(se.getMessage());
             }
-        } else {
-
         }
     }
 
     /**
      * This method is used to call LogLine Writer to write the log line.
      *
-     * @param Logline
+     * @param Logline error log line
      */
-    public void writeLogLine(String Logline) {
+    private void writeLogLine(String Logline) {
 
         LogLineWriter logLineWriter = new LogLineWriter();
         logLineWriter.execute(Logline, folderpath);
@@ -251,57 +250,18 @@ public class Interpreter {
     /**
      * This method is used to call ZipFileExecutor to file the dump folder.
      */
-    public void executeZipFileExecuter() {
+    private void executeZipFileExecuter() {
 
         ZipFileExecutor zipFileExecutor = new ZipFileExecutor();
         zipFileExecutor.execute(folderpath);
     }
 
-    /**
-     * This method is used to check current error time and previous time when the same error occurred.
-     * It also return whether tool has to do analysis for current error.
-     *
-     * @param testline error line
-     * @param error    error type
-     * @return
-     */
-//    private boolean checkErrorTime(String testline, String error, String time) {
-//
-//    String timeRegex = "\\d\\d:\\d\\d:\\d\\d,\\d\\d\\d";
-//        //Grep the first line of the error line.
-//        String[] errorLine = testline.split("\n");
-//
-//
-//        Long reloadTime= Long.parseLong(time);
-//
-//        Pattern pattern = Pattern.compile(timeRegex);
-//
-//        Matcher matcher = pattern.matcher(errorLine[0]);
-//        if (matcher.find()) {
-//
-//            long errorTime = calculatetime(matcher.group(0));
-//
-//            if (errorTimingMap.containsKey(error)) {
-//                //System.out.print((errorTimingMap.get(error) + " : " + errorTime + " : " + (errorTimingMap.get(error) - errorTime) + "\n"));
-//                if ((errorTime - errorTimingMap.get(error)) > reloadTime) {
-//                    errorTimingMap.replace(error, errorTime);
-//                } else {
-//                    return false;
-//                }
-//
-//            } else {
-//                errorTimingMap.put(error, errorTime);
-//                return true;
-//            }
-//        }
-//        return true;
-//    }
 
     /**
      * This method is used to calculate current error time form log line.
      *
-     * @param timeStr
-     * @return
+     * @param timeStr timestamp from the log line.
+     * @return calculated time in Integer.
      */
     private int calculatetime(String timeStr) {
 
@@ -330,10 +290,8 @@ public class Interpreter {
             long errorTime = calculatetime(matcher.group(0));
 
             if (actioexecutorLastTime.containsKey(error)) {
-//                System.out.print((actioexecutorLastTime.get(error) + " : " + errorTime + " : " + (actioexecutorLastTime.get(error) - errorTime) + "\n"));
                 if ((errorTime - actioexecutorLastTime.get(error)) > reloadTime) {
                     actioexecutorLastTime.replace(error, (int)errorTime);
-//                    System.out.print((actioexecutorLastTime.get(error) + " : " + errorTime + " : " + "\n"));
 
                 } else {
                     return false;
@@ -341,7 +299,6 @@ public class Interpreter {
 
             } else {
                 actioexecutorLastTime.put(error,(int)errorTime);
-//                System.out.print((actioexecutorLastTime.get(error) + " : " + errorTime + " : " + "\n"));
 
                 return true;
             }

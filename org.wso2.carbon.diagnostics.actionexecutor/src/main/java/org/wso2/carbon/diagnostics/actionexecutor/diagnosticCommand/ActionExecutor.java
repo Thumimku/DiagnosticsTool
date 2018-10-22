@@ -18,7 +18,7 @@ package org.wso2.carbon.diagnostics.actionexecutor.diagnosticCommand;
  *  under the License.
  */
 
-import org.wso2.carbon.diagnostics.regextree.ErrorRegexNode;
+import org.wso2.carbon.diagnostics.regextree.RegexNode;
 
 /**
  * All action executors should implements this interface.
@@ -30,16 +30,16 @@ public abstract class ActionExecutor {
     /**
      * This method called by executor to do the execution.
      */
-    ErrorRegexNode root;
+    RegexNode root;
 
     public abstract void execute(String folderpath);
 
-    public ErrorRegexNode getRoot() {
+    public RegexNode getRoot() {
 
         return root;
     }
 
-    public void setRoot(ErrorRegexNode root) {
+    public void setRoot(RegexNode root) {
 
         this.root = root;
     }

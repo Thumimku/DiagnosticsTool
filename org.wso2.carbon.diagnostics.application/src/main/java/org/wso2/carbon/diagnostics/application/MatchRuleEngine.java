@@ -20,8 +20,7 @@ package org.wso2.carbon.diagnostics.application;
 
 import org.wso2.carbon.diagnostics.logtailor.Tailer;
 import org.wso2.carbon.diagnostics.logtailor.TailerListenerAdapter;
-import org.wso2.carbon.diagnostics.regextree.ErrorRegexTree;
-
+import org.wso2.carbon.diagnostics.regextree.RegexTree;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -49,18 +48,17 @@ public class MatchRuleEngine extends TailerListenerAdapter {
 
     private StringBuilder logLine; // LogLine object initiated
 
-    private ErrorRegexTree regexTree;
+    private RegexTree regexTree;
 
     private Tailer tailer;
 
-    public MatchRuleEngine(ErrorRegexTree regexTree) {
-
+    MatchRuleEngine(RegexTree regexTree) {
 
         this.hasEngineApproved = false;
         this.generalEndRegex = regexTree.getEndRegex();
         this.generalStartRegex = regexTree.getStartRegex();
         this.interpreter = new Interpreter(regexTree);
-        this.regexTree=regexTree;
+        this.regexTree = regexTree;
         this.enableTailerCheck = true;
     }
 
@@ -124,8 +122,7 @@ public class MatchRuleEngine extends TailerListenerAdapter {
                 }
 
             } else if (enableTailerCheck) {
-                //System.out.print(testLine);
-                if (tailer.isEnd(testLine)) {
+                if (tailer.isEnd()) {
                     hasEngineApproved = false;
                     logLine.append(testLine);
                     if (interpreter != null) {
@@ -155,10 +152,11 @@ public class MatchRuleEngine extends TailerListenerAdapter {
             }
         }
     }
+
     @Override
     public void init(Tailer tailer) {
 
-        this.tailer=tailer;
+        this.tailer = tailer;
     }
 
 }

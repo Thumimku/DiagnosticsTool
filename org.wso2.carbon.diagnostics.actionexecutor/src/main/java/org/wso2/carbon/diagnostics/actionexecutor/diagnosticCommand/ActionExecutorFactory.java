@@ -17,7 +17,7 @@ package org.wso2.carbon.diagnostics.actionexecutor.diagnosticCommand;
  *  under the License.
  */
 
-import org.wso2.carbon.diagnostics.regextree.ErrorRegexNode;
+import org.wso2.carbon.diagnostics.regextree.RegexNode;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -36,7 +36,7 @@ public class ActionExecutorFactory {
      * @param executorType the executor type.
      * @return PostExecutor
      */
-    public ActionExecutor getActionExecutor(String executorType, ErrorRegexNode root) {
+    public ActionExecutor getActionExecutor(String executorType, RegexNode root) {
 
         try {
             String classnameShell = "org.wso2.carbon.diagnostics.actionexecutor.diagnosticCommand.";

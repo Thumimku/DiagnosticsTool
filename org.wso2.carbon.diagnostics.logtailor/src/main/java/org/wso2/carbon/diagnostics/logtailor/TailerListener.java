@@ -31,19 +31,19 @@ public interface TailerListener {
      *
      * @param tailer the tailer.
      */
-    public void init(Tailer tailer);
+     void init(Tailer tailer);
 
     /**
      * The tailer will call this method after stopping itself.
      */
-    public void stop();
+     void stop();
 
     /**
      * This method is called if the tailed file is not found.
      *
      * <b>Note:</b> this is called from the tailer thread.
      */
-    public void fileNotFound();
+     void fileNotFound();
 
     /**
      * Called if a file rotation is detected.
@@ -53,7 +53,7 @@ public interface TailerListener {
      *
      * <b>Note:</b> this is called from the tailer thread.
      */
-    public void fileRotated();
+     void fileRotated();
 
     /**
      * Handles a line from a Tailer.
@@ -62,7 +62,7 @@ public interface TailerListener {
      *
      * @param line the line.
      */
-    public void handle(String line);
+     void handle(String line);
 
     /**
      * Handles an Exception .
@@ -71,6 +71,6 @@ public interface TailerListener {
      *
      * @param ex the exception.
      */
-    public void error(Exception ex);
+     void error(Exception ex);
 
 }

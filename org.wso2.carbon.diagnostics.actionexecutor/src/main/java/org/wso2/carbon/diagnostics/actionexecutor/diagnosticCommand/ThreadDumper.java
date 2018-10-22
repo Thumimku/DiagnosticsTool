@@ -18,8 +18,6 @@ package org.wso2.carbon.diagnostics.actionexecutor.diagnosticCommand;
  */
 
 import org.json.simple.JSONObject;
-import org.wso2.carbon.diagnostics.regextree.ErrorRegexNode;
-import org.wso2.carbon.diagnostics.regextree.ErrorRegexTree;
 
 import java.io.File;
 import java.io.FileWriter;

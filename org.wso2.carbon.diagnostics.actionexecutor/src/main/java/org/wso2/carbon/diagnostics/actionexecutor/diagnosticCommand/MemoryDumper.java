@@ -17,7 +17,7 @@ package org.wso2.carbon.diagnostics.actionexecutor.diagnosticCommand;
  *  under the License.
  */
 
-import org.wso2.carbon.diagnostics.regextree.ErrorRegexNode;
+import org.wso2.carbon.diagnostics.regextree.RegexNode;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,7 +41,7 @@ public class MemoryDumper extends ActionExecutor {
     /**
      * Creates MemoryDumper with process id.
      */
-    public MemoryDumper(ErrorRegexNode root) {
+    public MemoryDumper(RegexNode root) {
 
         this.serverProcess = ServerProcess.getProcessId();
 

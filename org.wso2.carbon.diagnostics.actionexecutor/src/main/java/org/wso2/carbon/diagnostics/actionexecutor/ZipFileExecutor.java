@@ -49,16 +49,14 @@ public class ZipFileExecutor {
 
     /**
      * This method is used to write the log line into destination file and zip the folder.
-     *
-     *
      */
-    public void execute( String path) {
+    public void execute(String path) {
 
         File folder = new File(path);
 
         try {
             zipFolder(path, logDirpath + folder.getName() + ".zip");
-            System.out.print("Diagnosis Dumped in :" + logDirpath+folder.getName() + ".zip\n");
+            System.out.print("Diagnosis Dumped in :" + logDirpath + folder.getName() + ".zip\n");
         } catch (Exception e) {
             System.out.print("Unable to zip the file at " + path);
         }

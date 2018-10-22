@@ -23,62 +23,52 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.wso2.carbon.diagnostics.actionexecutor.diagnosticCommand.ServerProcess;
 import org.wso2.carbon.diagnostics.logtailor.Tailer;
-import org.wso2.carbon.diagnostics.regextree.ErrorRegexNode;
-import org.wso2.carbon.diagnostics.regextree.ErrorRegexTree;
+import org.wso2.carbon.diagnostics.regextree.RegexNode;
+import org.wso2.carbon.diagnostics.regextree.RegexTree;
 
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Hashtable;
 
 /**
  * Typical Java Application class.
  */
 public class Application {
 
-    public static void main(String[] args)  {
+    public static void main(String[] args) {
 
         System.out.print("................loading  OnBoard Diagnostics Tool .............\n\n");
         System.out.print(".............Loading Log File path Configuration data...........\n\n");
-//        XmlHelper.parsingData();
-//        System.out.print(" wso2carbon.log File path :- " + new XmlHelper().getLogFilePath() + "\n");
-//        System.out.print(" wso2carbon.pid File path :- " + new XmlHelper().getPidFilePath() + "\n");
 
         JSONParser parser = new JSONParser();
-        ErrorRegexTree errorRegexTree = new ErrorRegexTree();
+        RegexTree regexTree = new RegexTree();
 
         try {
-            JSONObject jsonObject =(JSONObject) parser.parse(new FileReader("resources/RegexTree.json"));
-            ErrorRegexNode root =  errorRegexTree.expandTree(jsonObject);
 
-            errorRegexTree.setRoot(root);
+            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader(System.getProperty("user.dir")+"/org.wso2.carbon.diagnostics.application/src/main/"+"resources/DiagnosticConfig.json"));
+            RegexNode root = regexTree.expandTree(jsonObject);
 
-
-
+            regexTree.setRoot(root);
 
             JSONArray actionExecutorConfig = (JSONArray) jsonObject.get("ActionExecutorConfiguration");
             root.setActionExecutorConfiguration((JSONArray) jsonObject.get("ActionExecutorConfiguration"));
-            for (Object AEObject: actionExecutorConfig){
+            for (Object AEObject : actionExecutorConfig) {
                 JSONObject AEJSON = (JSONObject) AEObject;
-                root.addToHashTable(AEJSON.get("Executor").toString(),AEJSON.get("ReloadTime").toString());
+                root.addToHashTable(AEJSON.get("Executor").toString(), AEJSON.get("ReloadTime").toString());
             }
 
-            JSONObject logFileConfig =(JSONObject) ((JSONArray) jsonObject.get("LogFileConfiguration")).get(0);
-            ServerProcess.setProcessId((String)logFileConfig.get("ProcessIdPath"));
-            errorRegexTree.setStartRegex((String)logFileConfig.get("StartRegex"));
-            errorRegexTree.setEndRegex((String)logFileConfig.get("EndRegex"));
+            JSONObject logFileConfig = (JSONObject) ((JSONArray) jsonObject.get("LogFileConfiguration")).get(0);
+            ServerProcess.setProcessId((String) logFileConfig.get("ProcessIdPath"));
+            regexTree.setStartRegex((String) logFileConfig.get("StartRegex"));
+            regexTree.setEndRegex((String) logFileConfig.get("EndRegex"));
 
-            MatchRuleEngine matchRuleEngine = new MatchRuleEngine(errorRegexTree);
+            MatchRuleEngine matchRuleEngine = new MatchRuleEngine(regexTree);
 
-            Tailer carbonLogTailor= new  Tailer((String) logFileConfig.get("FilePath"), matchRuleEngine,100,true);
+            Tailer carbonLogTailor = new Tailer((String) logFileConfig.get("FilePath"), matchRuleEngine, 100, true);
             carbonLogTailor.start();
 
-
-
-
-        } catch (IOException e) {
+        }catch (ParseException e) {
             System.out.print(e.getMessage());
-        } catch (ParseException e) {
+        } catch (IOException e) {
             System.out.print(e.getMessage());
         }
 //
@@ -89,9 +79,6 @@ public class Application {
 //      Thread correlationLogTailor= new Tailer(new File(XmlHelper.CorrelationLogPath),new LogReader(),1000,true);
 
 //      correlationLogTailor.start();
-
-
-
 
     }
 }
