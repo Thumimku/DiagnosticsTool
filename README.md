@@ -57,8 +57,8 @@ Regex Tree is built up in tool start up phase. It used as a static memory. Json 
 ## How to run
 
 - Clone the project
-- Build the project using `maven clean install`
-- Go to `OnBoardDiagnostics/org.wso2.carbon.diagnostics.application/target`
+- Build the project using `mvnn clean install`
+- Go to `DiagnosticsTool/org.wso2.carbon.diagnostics.application/target`
 - run jar file 
 
 
