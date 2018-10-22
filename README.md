@@ -57,6 +57,9 @@ Regex Tree is built up in tool start up phase. It used as a static memory. Json 
 ## How to run
 
 - Clone the project
+- Go to `DiagnosticsTool/org.wso2.carbon.diagnostics.application/resources`
+- Open the RegexTree.json file in any text editor
+- Edit `LogFileConfiguration` by providing wso2carbon.log file path and wso2carbon.pid file path
 - Build the project using `mvn clean install`
 - Go to `DiagnosticsTool/org.wso2.carbon.diagnostics.application/target`
 - run jar file 
