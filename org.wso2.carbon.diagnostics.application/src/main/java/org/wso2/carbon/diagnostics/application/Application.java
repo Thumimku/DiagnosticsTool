@@ -1,4 +1,3 @@
-package org.wso2.carbon.diagnostics.application;
 /*
  * Copyright (c) 2005-2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
@@ -17,11 +16,15 @@ package org.wso2.carbon.diagnostics.application;
  *  under the License.
  */
 
+package org.wso2.carbon.diagnostics.application;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.wso2.carbon.diagnostics.actionexecutor.diagnosticCommand.ServerProcess;
+import org.wso2.carbon.diagnostics.actionexecutor.ServerProcess;
 import org.wso2.carbon.diagnostics.logtailor.Tailer;
 import org.wso2.carbon.diagnostics.regextree.RegexNode;
 import org.wso2.carbon.diagnostics.regextree.RegexTree;
@@ -34,26 +37,29 @@ import java.io.IOException;
  */
 public class Application {
 
+    private static final Log log = LogFactory.getLog(Application.class);
+
     public static void main(String[] args) {
 
-        System.out.print("................loading  OnBoard Diagnostics Tool .............\n\n");
-        System.out.print(".............Loading Log File path Configuration data...........\n\n");
+        log.info("................loading  Diagnostics Tool .............");
+
 
         JSONParser parser = new JSONParser();
         RegexTree regexTree = new RegexTree();
 
+        String jsonFilePath = "/resources/DiagnosticConfig.json";
         try {
-
-            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader(System.getProperty("user.dir")+"/org.wso2.carbon.diagnostics.application/src/main/"+"resources/DiagnosticConfig.json"));
+            FileReader jsonFileReader = new FileReader(System.getProperty("user.dir") + jsonFilePath);
+            JSONObject jsonObject = (JSONObject) parser.parse(jsonFileReader);
             RegexNode root = regexTree.expandTree(jsonObject);
 
             regexTree.setRoot(root);
 
             JSONArray actionExecutorConfig = (JSONArray) jsonObject.get("ActionExecutorConfiguration");
             root.setActionExecutorConfiguration((JSONArray) jsonObject.get("ActionExecutorConfiguration"));
-            for (Object AEObject : actionExecutorConfig) {
-                JSONObject AEJSON = (JSONObject) AEObject;
-                root.addToHashTable(AEJSON.get("Executor").toString(), AEJSON.get("ReloadTime").toString());
+            for (Object aEObject : actionExecutorConfig) {
+                JSONObject aEJSON = (JSONObject) aEObject;
+                root.addToHashTable(aEJSON.get("Executor").toString(), aEJSON.get("ReloadTime").toString());
             }
 
             JSONObject logFileConfig = (JSONObject) ((JSONArray) jsonObject.get("LogFileConfiguration")).get(0);
@@ -63,13 +69,15 @@ public class Application {
 
             MatchRuleEngine matchRuleEngine = new MatchRuleEngine(regexTree);
 
+            log.info("listening to :" +  logFileConfig.get("FilePath"));
+
             Tailer carbonLogTailor = new Tailer((String) logFileConfig.get("FilePath"), matchRuleEngine, 100, true);
             carbonLogTailor.start();
 
-        }catch (ParseException e) {
-            System.out.print(e.getMessage());
+        } catch (ParseException e) {
+           log.error("parse exception occurred");
         } catch (IOException e) {
-            System.out.print(e.getMessage());
+            log.error("IO exception occurred");
         }
 //
 //

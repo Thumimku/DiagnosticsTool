@@ -1,4 +1,3 @@
-package org.wso2.carbon.diagnostics.actionexecutor.postexecutor;
 /*
  * Copyright (c) 2005-2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
@@ -17,6 +16,10 @@ package org.wso2.carbon.diagnostics.actionexecutor.postexecutor;
  *  under the License.
  */
 
+package org.wso2.carbon.diagnostics.actionexecutor.postexecutor;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -28,6 +31,7 @@ import java.io.IOException;
  * @author thumilan@wso2.com
  */
 public class LogLineWriter {
+    private static Log log = LogFactory.getLog(LogLineWriter.class);
 
     /**
      * public Constructor.
@@ -52,7 +56,7 @@ public class LogLineWriter {
             writer.write(logLine);
             writer.close();
         } catch (IOException e) {
-            System.out.print("exeception");
+            log.error("exeception");
         }
 
     }

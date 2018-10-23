@@ -1,4 +1,3 @@
-package org.wso2.carbon.diagnostics.application;
 
 /*
  * Copyright (c) 2005-2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
@@ -17,6 +16,7 @@ package org.wso2.carbon.diagnostics.application;
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.wso2.carbon.diagnostics.application;
 
 import org.wso2.carbon.diagnostics.logtailor.Tailer;
 import org.wso2.carbon.diagnostics.logtailor.TailerListenerAdapter;
@@ -25,8 +25,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * This class used to match the regex and the logLine.
- *
+ * This class is used to analyse all log lines and it divides into two part.
+ * For example :- Error and Info
+ * Then pass the error log line to Interpreter.
  * @author thumilan@wso2.com
  */
 
@@ -96,7 +97,6 @@ public class MatchRuleEngine extends TailerListenerAdapter {
      */
     @Override
     public void handle(String testLine) {
-//        String testLine = logCheckLine.toString();
         if (hasEngineApproved) { // previous lines were approved by the engine.
 
             if (checkInitialErrorMatch(testLine)) {

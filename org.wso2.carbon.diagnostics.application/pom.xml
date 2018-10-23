@@ -33,7 +33,7 @@
             <resource>
                 <directory>src/main/resources</directory>
                 <includes>
-                    <include>RegexTree.json</include>
+                    <include>DiagnosticConfig.json</include>
                 </includes>
                 <targetPath>${project.build.directory}/resources</targetPath>
             </resource>

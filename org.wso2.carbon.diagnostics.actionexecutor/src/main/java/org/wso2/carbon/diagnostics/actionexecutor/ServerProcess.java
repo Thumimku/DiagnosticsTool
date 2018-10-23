@@ -1,4 +1,3 @@
-package org.wso2.carbon.diagnostics.actionexecutor;
 /*
  * Copyright (c) 2005-2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
@@ -16,6 +15,10 @@ package org.wso2.carbon.diagnostics.actionexecutor;
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.wso2.carbon.diagnostics.actionexecutor;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -27,17 +30,18 @@ import java.io.RandomAccessFile;
  */
 public class ServerProcess {
 
+    private static Log log = LogFactory.getLog(ServerProcess.class);
     //private process id
-     static String processId;
+    static String processId;
 
-     static String processFilePath;
+    static String processFilePath;
 
     /**
      * Getter method for processId.
      *
      * @return String processId
      */
-     static String getProcessId() {
+    static String getProcessId() {
 
         if ((processId == null) || notAlive()) {
 
@@ -57,7 +61,7 @@ public class ServerProcess {
             file = new RandomAccessFile(path, "r");
             processId = file.readLine();
         } catch (IOException e) {
-            System.out.print("wso2carbon.pid file is Not Found.");
+            log.error("wso2carbon.pid file is Not Found.");
         }
     }
 
@@ -66,13 +70,13 @@ public class ServerProcess {
      *
      * @return Boolean isAlive()
      */
-     static boolean notAlive() {
+    static boolean notAlive() {
 
         try {
 
             return (Runtime.getRuntime().exec("ps " + processId).isAlive());
         } catch (IOException e) {
-            System.out.print("Unable to check the process state.");
+            log.error("Unable to check the process state.");
         }
         return false;
     }

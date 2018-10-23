@@ -1,4 +1,3 @@
-package org.wso2.carbon.diagnostics.application;
 /*
  * Copyright (c) 2005-2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
@@ -16,13 +15,16 @@ package org.wso2.carbon.diagnostics.application;
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.wso2.carbon.diagnostics.application;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.wso2.carbon.diagnostics.actionexecutor.LogLineWriter;
-import org.wso2.carbon.diagnostics.actionexecutor.ZipFileExecutor;
-import org.wso2.carbon.diagnostics.actionexecutor.diagnosticCommand.ActionExecutor;
-import org.wso2.carbon.diagnostics.actionexecutor.diagnosticCommand.ActionExecutorFactory;
+import org.wso2.carbon.diagnostics.actionexecutor.ActionExecutor;
+import org.wso2.carbon.diagnostics.actionexecutor.ActionExecutorFactory;
+import org.wso2.carbon.diagnostics.actionexecutor.postexecutor.LogLineWriter;
+import org.wso2.carbon.diagnostics.actionexecutor.postexecutor.ZipFileExecutor;
 import org.wso2.carbon.diagnostics.regextree.RegexNode;
 import org.wso2.carbon.diagnostics.regextree.RegexTree;
 
@@ -43,37 +45,36 @@ import java.util.regex.Pattern;
  *
  * @author thumilan@wso2.com
  */
- class Interpreter {
+class Interpreter {
 
     private ActionExecutorFactory actionExecutorFactory; // ActionExecutorFactory to create executor objects
-
     private String folderpath; // Folder path of the TimeStamp Folder
 
 //    //This HashMap used to map error type and their waiting time
 //    private  HashMap<String, Long> errorTimingMap = new HashMap<>();
 
-    private  Hashtable <String,Integer> actioexecutorLastTime;
+    private Hashtable<String, Integer> actioexecutorLastTime;
 
     private RegexNode root;
 
     private RegexTree regexTree;
     private int count;
 
-
+    private static Log log = LogFactory.getLog(Interpreter.class);
 
     /**
      * public Constructor.
      * Current action executor is set as zipFile executor
      * This constructor calls createFolder to create the Thread Dump folder and do thread dump.
      */
-     Interpreter(RegexTree regexTree) {
+    Interpreter(RegexTree regexTree) {
 
         this.actionExecutorFactory = new ActionExecutorFactory();
         createLogFolder();
-        this.regexTree=regexTree;
+        this.regexTree = regexTree;
         this.root = regexTree.getRoot();
         actioexecutorLastTime = new Hashtable<>();
-        count=1;
+        count = 1;
 
     }
 
@@ -85,7 +86,7 @@ import java.util.regex.Pattern;
      *
      * @param log error log line
      */
-     void interpret(StringBuilder log) {
+    void interpret(StringBuilder log) {
 
         String logLine = log.toString();
         //First check whether the error line is valid or not.
@@ -98,8 +99,6 @@ import java.util.regex.Pattern;
             //this.executeZipFileExecuter();
 
             //}
-
-
 
             this.diagnoseError(logLine);
 
@@ -114,31 +113,26 @@ import java.util.regex.Pattern;
      * Finally do the analysis.
      *
      * @param logLine error line
-     *
      */
     private void diagnoseError(String logLine) {
 
-
-
         RegexNode errorNode = regexTree.findDiagnosis(logLine);
 
-        if((errorNode.getDiagnosis())!=null){
+        if ((errorNode.getDiagnosis()) != null) {
             JSONArray diagnosisArray = errorNode.getDiagnosis();
-            System.out.print(count+" : "+errorNode.getDescription()+"\n");
+            log.info(count + " : " + errorNode.getDescription() + "\n");
             count++;
             this.createFolder();
-            if(this.doAnalysis(diagnosisArray,logLine)){
+            if (this.doAnalysis(diagnosisArray, logLine)) {
 
                 this.writeLogLine(logLine);
                 this.executeZipFileExecuter();
-//                    this.deleteFolder();
-            }else {
+                this.deleteFolder();
+            } else {
                 this.deleteFolder();
             }
 
-
         }
-
 
     }
 
@@ -148,20 +142,20 @@ import java.util.regex.Pattern;
      *
      * @param diagnoseArray JSON array
      */
-    private boolean doAnalysis(JSONArray diagnoseArray,String logLine) {
-        boolean analysed =  false;
+    private boolean doAnalysis(JSONArray diagnoseArray, String logLine) {
+
+        boolean analysed = false;
         for (Object object : diagnoseArray) {
             JSONObject errorJsonObject = (JSONObject) object;
-            if(checkActionExecutorReloadTime(logLine,errorJsonObject.get("Executor").toString(),root.getactionExecutorReloadTime().get(errorJsonObject.get("Executor").toString()))){
-                ActionExecutor actionExecutor = actionExecutorFactory.getActionExecutor(errorJsonObject.get("Executor").toString(),root);
+            String reloadTime = root.getactionExecutorReloadTime().get(errorJsonObject.get("Executor").toString());
+            String errorType = errorJsonObject.get("Executor").toString();
+            if (checkActionExecutorReloadTime(logLine, errorType, reloadTime)) {
+                ActionExecutor actionExecutor = actionExecutorFactory.getActionExecutor(errorType, root);
                 if (actionExecutor != null) {
                     actionExecutor.execute(this.folderpath);
                     analysed = true;
                 }
             }
-
-
-
 
         }
         return analysed;
@@ -192,12 +186,13 @@ import java.util.regex.Pattern;
         }
     }
 
-    private void deleteFolder(){
+    private void deleteFolder() {
+
         File dumpfolder = new File(this.folderpath);
-        if (dumpfolder.exists()){
-            String[]entries = dumpfolder.list();
-            for(String entry: entries){
-                File currentFile = new File(dumpfolder.getPath(),entry);
+        if (dumpfolder.exists()) {
+            String[] entries = dumpfolder.list();
+            for (String entry : entries) {
+                File currentFile = new File(dumpfolder.getPath(), entry);
                 currentFile.delete();
             }
             dumpfolder.delete();
@@ -224,14 +219,13 @@ import java.util.regex.Pattern;
         File dumpFolder = new File(folderpath + foldername);
         if (!dumpFolder.exists()) {
             try {
-                if (dumpFolder.mkdir()){
+                if (dumpFolder.mkdir()) {
                     folderpath = folderpath + foldername; // create folder if not exists.
                 }
 
-
             } catch (SecurityException se) {
                 //handle it
-                System.out.print(se.getMessage());
+               log.error(se.getMessage());
             }
         }
     }
@@ -239,12 +233,12 @@ import java.util.regex.Pattern;
     /**
      * This method is used to call LogLine Writer to write the log line.
      *
-     * @param Logline error log line
+     * @param logline error log line
      */
-    private void writeLogLine(String Logline) {
+    private void writeLogLine(String logline) {
 
         LogLineWriter logLineWriter = new LogLineWriter();
-        logLineWriter.execute(Logline, folderpath);
+        logLineWriter.execute(logline, folderpath);
     }
 
     /**
@@ -255,7 +249,6 @@ import java.util.regex.Pattern;
         ZipFileExecutor zipFileExecutor = new ZipFileExecutor();
         zipFileExecutor.execute(folderpath);
     }
-
 
     /**
      * This method is used to calculate current error time form log line.
@@ -279,8 +272,7 @@ import java.util.regex.Pattern;
         //Grep the first line of the error line.
         String[] errorLine = testline.split("\n");
 
-
-        Long reloadTime= Long.parseLong(time);
+        Long reloadTime = Long.parseLong(time);
 
         Pattern pattern = Pattern.compile(timeRegex);
 
@@ -291,14 +283,14 @@ import java.util.regex.Pattern;
 
             if (actioexecutorLastTime.containsKey(error)) {
                 if ((errorTime - actioexecutorLastTime.get(error)) > reloadTime) {
-                    actioexecutorLastTime.replace(error, (int)errorTime);
+                    actioexecutorLastTime.replace(error, (int) errorTime);
 
                 } else {
                     return false;
                 }
 
             } else {
-                actioexecutorLastTime.put(error,(int)errorTime);
+                actioexecutorLastTime.put(error, (int) errorTime);
 
                 return true;
             }

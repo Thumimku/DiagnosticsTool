@@ -1,4 +1,3 @@
-package org.wso2.carbon.diagnostics.actionexecutor.postexecutor;
 /*
  * Copyright (c) 2005-2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
@@ -17,6 +16,10 @@ package org.wso2.carbon.diagnostics.actionexecutor.postexecutor;
  *  under the License.
  */
 
+package org.wso2.carbon.diagnostics.actionexecutor.postexecutor;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -33,6 +36,8 @@ import java.util.zip.ZipOutputStream;
  * @author thumilan@wso2.com
  */
 public class ZipFileExecutor {
+
+    private static Log log = LogFactory.getLog(ZipFileExecutor.class);
 
     /**
      * public Constructor.
@@ -56,9 +61,9 @@ public class ZipFileExecutor {
 
         try {
             zipFolder(path, logDirpath + folder.getName() + ".zip");
-            System.out.print("Diagnosis Dumped in :" + logDirpath + folder.getName() + ".zip\n");
+            log.info("Diagnosis Dumped in :" + logDirpath + folder.getName() + ".zip\n");
         } catch (Exception e) {
-            System.out.print("Unable to zip the file at " + path);
+            log.error("Unable to zip the file at " + path);
         }
 
     }
@@ -127,8 +132,6 @@ public class ZipFileExecutor {
             throws Exception {
 
         File folder = new File(srcFolder);
-
-
 
         for (String fileName : folder.list()) {
             if (path.equals("")) {

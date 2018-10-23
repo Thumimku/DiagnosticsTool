@@ -1,4 +1,3 @@
-package org.wso2.carbon.diagnostics.actionexecutor;
 
 /*
  * Copyright (c) 2005-2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
@@ -18,6 +17,7 @@ package org.wso2.carbon.diagnostics.actionexecutor;
  *  under the License.
  */
 
+package org.wso2.carbon.diagnostics.actionexecutor;
 import org.wso2.carbon.diagnostics.regextree.RegexNode;
 
 /**

@@ -1,4 +1,3 @@
-package org.wso2.carbon.diagnostics.actionexecutor;
 /*
  * Copyright (c) 2005-2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
@@ -17,6 +16,10 @@ package org.wso2.carbon.diagnostics.actionexecutor;
  *  under the License.
  */
 
+package org.wso2.carbon.diagnostics.actionexecutor;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.json.simple.JSONObject;
 
 import java.io.File;
@@ -34,6 +37,8 @@ import java.util.Scanner;
  * This class use Java Runtinme enviroment and jstack command to do thread dump.
  */
 public class ThreadDumper extends ActionExecutor {
+
+    private static Log log = LogFactory.getLog(ThreadDumper.class);
 
     /**
      * This string is used to represent process id.
@@ -62,7 +67,7 @@ public class ThreadDumper extends ActionExecutor {
      * @param processid process id which used for thread dumping
      * @param delay     delay between two thread dumps
      */
-     ThreadDumper(String processid, long delay) {
+    ThreadDumper(String processid, long delay) {
 
         this(processid, delay, 5);
 
@@ -89,7 +94,7 @@ public class ThreadDumper extends ActionExecutor {
      * @param delay           delay between two thread dumps
      * @param threadDumpCount number of threadDumps.
      */
-     ThreadDumper(String processid, long delay, int threadDumpCount) {
+    ThreadDumper(String processid, long delay, int threadDumpCount) {
 
         if (processid != null && delay > 999 && threadDumpCount > 3) {
             this.processid = processid;
@@ -126,7 +131,7 @@ public class ThreadDumper extends ActionExecutor {
 
         if (new File(folderpath).exists()) { // check whether file exists before dumping.
             String commandFrame = System.getenv("JAVA_HOME") + "/bin/jstack " + processid;
-            System.out.print("\t Thread Dump Successfully Dumped.\n");
+            log.info("\t Thread Dump Successfully Dumped.\n");
 
             for (int counter = threadDumpCount; counter > 0; counter--) {
                 try {
@@ -139,7 +144,7 @@ public class ThreadDumper extends ActionExecutor {
                         writer.write(scanner.next());
                         writer.close();
                     } catch (IOException e) {
-                        System.out.print("Unable to do write in file while thread dumping");
+                        log.error("Unable to do write in file while thread dumping");
                     }
 
                     scanner.close();
@@ -149,9 +154,9 @@ public class ThreadDumper extends ActionExecutor {
                         this.wait(delay);
                     }
                 } catch (IOException e) {
-                    System.out.print("Unable to do thread dump for " + processid + "\n");
+                    log.error("Unable to do thread dump for " + processid + "\n");
                 } catch (InterruptedException e) {
-                    System.out.print("Unable to do wait delay time due to : " + e.getMessage());
+                    log.error("Unable to do wait delay time due to : " + e.getMessage());
                 }
 
             }

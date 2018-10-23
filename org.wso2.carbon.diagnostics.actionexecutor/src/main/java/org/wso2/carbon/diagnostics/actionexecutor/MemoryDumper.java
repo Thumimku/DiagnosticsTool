@@ -1,4 +1,3 @@
-package org.wso2.carbon.diagnostics.actionexecutor;
 /*
  * Copyright (c) 2005-2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
@@ -16,7 +15,10 @@ package org.wso2.carbon.diagnostics.actionexecutor;
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.wso2.carbon.diagnostics.actionexecutor;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.diagnostics.regextree.RegexNode;
 
 import java.io.File;
@@ -29,9 +31,10 @@ import java.io.IOException;
  *
  * @author thumilan@wso2.com
  * @see ServerProcess
- *
  */
 public class MemoryDumper extends ActionExecutor {
+
+    private static Log log = LogFactory.getLog(MemoryDumper.class);
 
     /**
      * This string is used to represent process id.
@@ -47,7 +50,6 @@ public class MemoryDumper extends ActionExecutor {
 
     }
 
-
     /**
      * Method used to do memory dump with using Java Runtime Environment and jmap command.
      *
@@ -62,9 +64,9 @@ public class MemoryDumper extends ActionExecutor {
             String frame = prefix + filepath + filename + serverProcess;
             try {
                 Runtime.getRuntime().exec(frame);
-                System.out.print("\t Memory Dump Successfully Dumped.\n");
+                log.info("\t Memory Dump Successfully Dumped.\n");
             } catch (IOException e) {
-                System.out.print("Unable to do Memory dump for " + serverProcess);
+                log.error("Unable to do Memory dump for " + serverProcess);
             }
 
         }

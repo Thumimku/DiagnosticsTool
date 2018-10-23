@@ -1,4 +1,3 @@
-package org.wso2.carbon.diagnostics.regextree;
 /*
  * Copyright (c) 2005-2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
@@ -17,6 +16,7 @@ package org.wso2.carbon.diagnostics.regextree;
  *  under the License.
  */
 
+package org.wso2.carbon.diagnostics.regextree;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -38,10 +38,10 @@ public class RegexNode {
     private JSONArray diagnosis;
 
     // A String to address the node for user understanding.
-    private String Description;
+    private String description;
 
-    // A string ID to identify a node for developing purpose.
-    private String Id;
+    // A string id to identify a node for developing purpose.
+    private String id;
 
     // A Hash table which used to map every action executor with their reload time.
     // This attribute is only for Root node
@@ -50,20 +50,20 @@ public class RegexNode {
     // A JsonArray which used to configure action Executor
     private JSONArray actionExecutorConfiguration;
 
-    public RegexNode(String Id, String Description, JSONArray data) {
+    public RegexNode(String id, String description, JSONArray data) {
 
-        this.Id = Id;
+        this.id = id;
         this.diagnosis = data;
-        this.Description = Description;
+        this.description = description;
         this.children = new Hashtable<>();
         this.actionExecutorReloadTime = new Hashtable<>();
         this.actionExecutorConfiguration = new JSONArray();
 
     }
 
-    RegexNode(String Id, String Description) {
+    RegexNode(String id, String description) {
 
-        this(Id, Description, null);
+        this(id, description, null);
 
     }
 
@@ -99,11 +99,11 @@ public class RegexNode {
 
     public JSONObject getconfiguration(String className) {
 
-        for (Object AEObject : this.actionExecutorConfiguration) {
-            JSONObject AEJSON = (JSONObject) AEObject;
-            if (AEJSON.get("Executor").toString().compareTo(className) == 0) {
+        for (Object aEObject : this.actionExecutorConfiguration) {
+            JSONObject aEJSON = (JSONObject) aEObject;
+            if (aEJSON.get("Executor").toString().compareTo(className) == 0) {
 
-                return AEJSON;
+                return aEJSON;
             }
         }
         return null;
@@ -131,12 +131,12 @@ public class RegexNode {
 
     public String getDescription() {
 
-        return Description;
+        return description;
     }
 
-    public String getId() {
+    public String getid() {
 
-        return Id;
+        return id;
     }
 
 }

@@ -1,4 +1,3 @@
-package org.wso2.carbon.diagnostics.actionexecutor.postexecutor;
 /*
  * Copyright (c) 2005-2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
@@ -16,6 +15,10 @@ package org.wso2.carbon.diagnostics.actionexecutor.postexecutor;
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.wso2.carbon.diagnostics.actionexecutor.postexecutor;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * PrintLineExecutor used to print the logLines into the console.
@@ -27,6 +30,7 @@ package org.wso2.carbon.diagnostics.actionexecutor.postexecutor;
  * @author thumilan@wso2.com
  */
 public class PrintLineExecutor {
+    private static Log log = LogFactory.getLog(PrintLineExecutor.class);
 
     /**
      * public Constructor.
@@ -43,6 +47,6 @@ public class PrintLineExecutor {
 
     public void execute(StringBuilder logLine, String path) {
 
-        System.out.print(logLine + "\n");
+        log.info(logLine + "\n");
     }
 }

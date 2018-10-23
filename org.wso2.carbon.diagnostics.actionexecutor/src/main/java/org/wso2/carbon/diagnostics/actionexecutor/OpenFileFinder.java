@@ -1,4 +1,3 @@
-package org.wso2.carbon.diagnostics.actionexecutor;
 /*
  * Copyright (c) 2005-2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
@@ -16,6 +15,10 @@ package org.wso2.carbon.diagnostics.actionexecutor;
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.wso2.carbon.diagnostics.actionexecutor;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -29,7 +32,7 @@ import java.util.Scanner;
  */
 public class OpenFileFinder extends ActionExecutor {
 
-
+    private static Log log = LogFactory.getLog(OpenFileFinder.class);
 
     /**
      * This string is used to represent process id.
@@ -41,7 +44,7 @@ public class OpenFileFinder extends ActionExecutor {
      */
     public OpenFileFinder() {
 
-        this.processId =  ServerProcess.getProcessId();
+        this.processId = ServerProcess.getProcessId();
 
     }
 
@@ -56,26 +59,25 @@ public class OpenFileFinder extends ActionExecutor {
         if (new File(filepath).exists()) { // check whether file exists before dumping.
             String frame = filepath + "/lsof.txt ";
             String command = "lsof -p " + this.processId;
-            System.out.print("\t lsof successfully Done.\n");
+            log.info("\t lsof successfully Done.\n");
 
             try {
 
-                    Process process = Runtime.getRuntime().exec(command);
-                    Scanner scanner = new Scanner(process.getInputStream(), "IBM850");
-                    scanner.useDelimiter("\\A");
-                    try {
-                        FileWriter writer = new FileWriter(frame);
-                        writer.write(scanner.next());
-                        writer.close();
-                    } catch (IOException e) {
-                        System.out.print("Unable to do write in file in netstat");
-                    }
-                    scanner.close();
+                Process process = Runtime.getRuntime().exec(command);
+                Scanner scanner = new Scanner(process.getInputStream(), "IBM850");
+                scanner.useDelimiter("\\A");
+                try {
+                    FileWriter writer = new FileWriter(frame);
+                    writer.write(scanner.next());
+                    writer.close();
+                } catch (IOException e) {
+                    log.error("Unable to do write in file in netstat");
+                }
+                scanner.close();
 
 
-                //System.out.print(command);
             } catch (IOException e) {
-                System.out.print("Unable to do netstat");
+                log.error("Unable to do netstat");
             }
         }
 

@@ -1,4 +1,3 @@
-package org.wso2.carbon.diagnostics.actionexecutor;
 /*
  * Copyright (c) 2005-2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
@@ -16,6 +15,10 @@ package org.wso2.carbon.diagnostics.actionexecutor;
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.wso2.carbon.diagnostics.actionexecutor;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -30,6 +33,7 @@ import java.net.UnknownHostException;
  * @author thumilan@wso2.com
  */
 public class DatabaseConnectionScanner extends ActionExecutor {
+    private static Log log = LogFactory.getLog(DatabaseConnectionScanner.class);
 
     /**
      * Simple Constructor.
@@ -54,13 +58,13 @@ public class DatabaseConnectionScanner extends ActionExecutor {
             out.close();
             in.close();
             echoSocket.close();
-            System.out.print("\tDatabase connection is Alive\n");
+            log.info("\tDatabase connection is Alive\n");
 
         } catch (UnknownHostException e) {
-            System.out.print("Don't know about host: ");
+            log.error("Don't know about host: ");
 
         } catch (IOException e) {
-            System.out.print("Couldn't get I/O for the connection to:");
+            log.error("Couldn't get I/O for the connection to:");
 
         }
 

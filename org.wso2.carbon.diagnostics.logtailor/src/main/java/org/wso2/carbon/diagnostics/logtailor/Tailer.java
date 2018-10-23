@@ -1,5 +1,3 @@
-package org.wso2.carbon.diagnostics.logtailor;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -16,6 +14,9 @@ package org.wso2.carbon.diagnostics.logtailor;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.wso2.carbon.diagnostics.logtailor;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.io.Closeable;
 import java.io.File;
@@ -24,7 +25,6 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-
 /**
  * Implementation of the unix "tail -f" functionality, forked from the Apache Commons IO project and providing fixes,
  * cleaner APIs and improved
@@ -44,6 +44,8 @@ import java.nio.channels.FileChannel;
  * @see TailerListenerAdapter
  */
 public class Tailer extends Thread {
+
+    private static final Log log = LogFactory.getLog(Tailer.class);
 
     /**
      * The file which will be tailed.
@@ -75,7 +77,7 @@ public class Tailer extends Thread {
     private StringBuffer charBuffer;
 
     /**
-     * The Tailer position in the file
+     * The Tailer position in the file.
      */
     private long position;
 
@@ -165,7 +167,7 @@ public class Tailer extends Thread {
                     try {
                         Thread.sleep(delay);
                     } catch (InterruptedException e) {
-                        System.out.print(e.getMessage());
+                        log.error("Interrupted Exception occurred");
                     }
                 } else {
                     // The current position in the file
@@ -215,7 +217,7 @@ public class Tailer extends Thread {
                     try {
                         Tailer.sleep(delay);
                     } catch (Exception e) {
-                        System.out.print(e.getMessage());
+                        log.error("Error occurred during thread sleep");
                     }
                 }
             }
@@ -263,7 +265,7 @@ public class Tailer extends Thread {
             buffer.clear();
             return fileChannel.position();
         } catch (IOException e) {
-            System.out.print("Unable to read from the log file due to : " + e.getMessage());
+            log.error("IOException error occurred. Unable to read the file");
         }
         return read;
     }
@@ -275,7 +277,7 @@ public class Tailer extends Thread {
                 closeable.close();
             }
         } catch (IOException ioe) {
-            System.out.print("Unable to close the file due to : " + ioe.getMessage());
+            log.error("unable to close the file");
         }
     }
 
@@ -284,7 +286,7 @@ public class Tailer extends Thread {
         try {
             return (!(buffer.hasRemaining()) && ((position + 4096) > (reader.length())));
         } catch (IOException e) {
-            e.printStackTrace();
+        log.error("Error occurred");
         }
         return false;
     }

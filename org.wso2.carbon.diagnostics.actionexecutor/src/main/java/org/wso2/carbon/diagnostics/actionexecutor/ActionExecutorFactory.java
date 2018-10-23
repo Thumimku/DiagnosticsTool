@@ -1,4 +1,3 @@
-package org.wso2.carbon.diagnostics.actionexecutor;
 /*
  * Copyright (c) 2005-2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
@@ -16,10 +15,13 @@ package org.wso2.carbon.diagnostics.actionexecutor;
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.wso2.carbon.diagnostics.actionexecutor;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.diagnostics.regextree.RegexNode;
 
-import java.lang.reflect.InvocationTargetException;
+
 
 /**
  * This Factory class used to create various Executors instance by their class name.
@@ -27,7 +29,7 @@ import java.lang.reflect.InvocationTargetException;
  * @author thumilan@wso2.com
  */
 public class ActionExecutorFactory {
-
+    private static Log log = LogFactory.getLog(ActionExecutorFactory.class);
     /**
      * This Method used to create Executor objects.
      *
@@ -43,16 +45,8 @@ public class ActionExecutorFactory {
             ActionExecutor actionExecutor = (ActionExecutor) tempObject;
             actionExecutor.setRoot(root);
             return actionExecutor;
-        } catch (NoSuchMethodException e) {
-            System.out.print("Invalid executor configured as " + executorType + " . Unable to load the class");
-        } catch (ClassNotFoundException e) {
-            System.out.print("exception");
-        } catch (IllegalAccessException e) {
-            System.out.print("exception");
-        } catch (InstantiationException e) {
-            System.out.print("exception");
-        } catch (InvocationTargetException e) {
-            System.out.print("exception");
+        } catch (Exception e) {
+            log.error("Invalid executor configured as " + executorType + " . Unable to load the class");
         }
 
         return null;

@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/OnboardDiagnostics.iml" filepath="$PROJECT_DIR$/OnboardDiagnostics.iml" />
+      <module fileurl="file://$PROJECT_DIR$/DiagnosticsTool.iml" filepath="$PROJECT_DIR$/DiagnosticsTool.iml" />
       <module fileurl="file://$PROJECT_DIR$/org.wso2.carbon.diagnostic.r.egextree/org.wso2.carbon.diagnostic.regextree.iml" filepath="$PROJECT_DIR$/org.wso2.carbon.diagnostic.r.egextree/org.wso2.carbon.diagnostic.regextree.iml" />
       <module fileurl="file://$PROJECT_DIR$/org.wso2.carbon.diagnostics.actionexecutor/org.wso2.carbon.diagnostics.actionexecutor.iml" filepath="$PROJECT_DIR$/org.wso2.carbon.diagnostics.actionexecutor/org.wso2.carbon.diagnostics.actionexecutor.iml" />
       <module fileurl="file://$PROJECT_DIR$/org.wso2.carbon.diagnostics.application/org.wso2.carbon.diagnostics.application.iml" filepath="$PROJECT_DIR$/org.wso2.carbon.diagnostics.application/org.wso2.carbon.diagnostics.application.iml" />

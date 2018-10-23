@@ -1,4 +1,3 @@
-package org.wso2.carbon.diagnostics.regextree;
 
 /*
  * Copyright (c) 2005-2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
@@ -17,6 +16,7 @@ package org.wso2.carbon.diagnostics.regextree;
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.wso2.carbon.diagnostics.regextree;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -30,7 +30,6 @@ import java.util.Set;
  * This regex pattern order is given in the form of regexTree.
  * RegexTree will be created at the initialization of the tool from given json file.
  */
-
 public class RegexTree {
 
     // A Regex Node to represent root node.
@@ -85,7 +84,6 @@ public class RegexTree {
     public void checkTree(RegexNode root) {
 
         Set<ArrayList<String>> keys = root.getChildren().keySet();
-        System.out.print(root.getChildren().toString() + "\n");
         for (ArrayList<String> key : keys) {
             checkTree(root.getChildren().get(key));
         }

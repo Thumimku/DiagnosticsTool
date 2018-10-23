@@ -1,4 +1,3 @@
-package org.wso2.carbon.diagnostics.actionexecutor;
 /*
  * Copyright (c) 2005-2018, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
@@ -17,6 +16,10 @@ package org.wso2.carbon.diagnostics.actionexecutor;
  *  under the License.
  */
 
+package org.wso2.carbon.diagnostics.actionexecutor;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -29,7 +32,7 @@ import java.util.Scanner;
  */
 public class NetstatExecuter extends ActionExecutor {
 
-
+    private static Log log = LogFactory.getLog(NetstatExecuter.class);
 
     /**
      * Method used to do memory dump with using Java Runtime Environment and jmap command.
@@ -40,7 +43,7 @@ public class NetstatExecuter extends ActionExecutor {
     public void execute(String filepath) {
 
         if (new File(filepath).exists()) { // check whether file exists before dumping.
-            System.out.print("\t Netstat Successfuly done.\n");
+            log.info("\t Netstat Successfuly done.\n");
             String filename = "/netstat.txt ";
             String frame = filepath + filename;
             String command;
@@ -62,21 +65,20 @@ public class NetstatExecuter extends ActionExecutor {
                         writer.write(scanner.next());
                         writer.close();
                     } catch (IOException e) {
-                        System.out.print("Unable to do write in file in netstat");
+                        log.error("Unable to do write in file in netstat");
                     }
                     scanner.close();
                 } else {
-                    System.out.print("Unable to detect the OS");
+                    log.error("Unable to detect the OS");
                 }
 
-                //System.out.print(command);
+
             } catch (IOException e) {
-                System.out.print("Unable to do netstat");
+                log.error("Unable to do netstat");
             }
 
         }
 
     }
-
 
 }

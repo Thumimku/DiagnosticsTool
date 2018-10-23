@@ -14,7 +14,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="OnboardDiagnostics" target="8" />
+      <module name="DiagnosticsTool" target="8" />
       <module name="org.wso2.carbon.diagnostic.regextree" target="8" />
       <module name="org.wso2.carbon.diagnostics.actionexecutor" target="8" />
       <module name="org.wso2.carbon.diagnostics.application" target="8" />
