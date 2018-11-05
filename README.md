@@ -53,6 +53,46 @@ Regex Tree is built up in tool start up phase. It used as a static memory. Json 
 
 
 ## How to Configure Json File
+Json file contains Three parts. This file is supposed to to configure the tool to read one log file. 
+
+1.REGEX TREE
+
+This regex tree implements following logic.
+```
+BEGIN
+
+	IF <parent_regex> OCCURRED THEN CHECK FOR MATCHING <child_regex>.
+  
+		<parent_regex>:- Strings in current node's "Regex" JSON array.
+    
+		<child_regex>:- Strings in "Children" JSON array's "Regex" JSON array.
+    
+	IF MATCH FOUND LOOP TO PREVIOUS ONE ALTERING PARENT NODE AS CHILD NODE.
+  
+	ELSE RETURN DIAGNOSIS JSON  ARRAY
+  
+END
+ ```
+  
+STRUCTURE
+
+- Id – Unique String to identify 
+
+- Description – Short description about the node/error.
+
+- Children – JSON array which contains children nodes.
+
+- Diagnosis – JSON array which contains executor json object. 
+
+		Note that executor name should be it’s class name.
+    
+2.ACTION EXECUTOR CONFIGURATION
+
+- This is a JSON array contains configuration  for the action executors. 
+  
+3.LOG FILE CONFIGURATION
+
+- This JSON array has attributes of log file. 
 
 ## How to run
 
