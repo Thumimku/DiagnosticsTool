@@ -41,7 +41,7 @@ import java.io.IOException;
 public class Application {
 
     private static final Log log = LogFactory.getLog(Application.class);
-    private static final String CONFIG_FILE_PATH = "/resources/DiagnosticConfig.json";
+    private static final String CONFIG_FILE_PATH = "/DiagnosticConfig.json";
 
     public static void main(String[] args) {
 
@@ -72,15 +72,6 @@ public class Application {
         } catch (IOException e) {
             log.error("IO exception occurred", e);
         }
-//
-//
-//
-//        //Initiate tailer class to tail the file
-//
-//      Thread correlationLogTailor= new Tailer(new File(XmlHelper.CorrelationLogPath),new LogReader(),1000,true);
-
-//      correlationLogTailor.start();
-
     }
 
     private static JSONObject readConfiguration(JSONParser parser, RegexTree regexTree, File configFile)

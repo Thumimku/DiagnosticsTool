@@ -35,9 +35,32 @@
                 <includes>
                     <include>DiagnosticConfig.json</include>
                 </includes>
-                <targetPath>${project.build.directory}/resources</targetPath>
+                <targetPath>${project.build.directory}/diagnostics-tool/bin</targetPath>
             </resource>
         </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>appassembler-maven-plugin</artifactId>
+                <configuration>
+                    <assembleDirectory>target/diagnostics-tool</assembleDirectory>
+                    <programs>
+                        <program>
+                            <mainClass>org.wso2.carbon.diagnostics.application.Application</mainClass>
+                            <id>diagnostics</id>
+                        </program>
+                    </programs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>assemble</id>
+                        <goals>
+                            <goal>assemble</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
 
 </project>
