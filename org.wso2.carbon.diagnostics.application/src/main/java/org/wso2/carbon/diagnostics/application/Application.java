@@ -30,6 +30,7 @@ import org.wso2.carbon.diagnostics.logtailor.Tailer;
 import org.wso2.carbon.diagnostics.regextree.RegexNode;
 import org.wso2.carbon.diagnostics.regextree.RegexTree;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -44,45 +45,32 @@ public class Application {
 
     public static void main(String[] args) {
 
-        log.info("................loading  Diagnostics Tool .............");
+        log.info("Diagnostic tool is starting...");
 
         JSONParser parser = new JSONParser();
         RegexTree regexTree = new RegexTree();
 
         try {
-            FileReader jsonFileReader = new FileReader(System.getProperty("user.dir") + CONFIG_FILE_PATH);
-            JSONObject jsonObject = (JSONObject) parser.parse(jsonFileReader);
-            RegexNode root = regexTree.expandTree(jsonObject);
+            File configFile = new File(System.getProperty("user.dir") + CONFIG_FILE_PATH);
+            log.info("Reading config file at the location: " + configFile.getAbsolutePath());
+            if (!configFile.exists() || !configFile.isFile()) {
+                log.error("Diagnostic configuration does not exists in the path: " + configFile.getAbsolutePath());
+            } else {
+                JSONObject logFileConfig = readConfiguration(parser, regexTree, configFile);
 
-            regexTree.setRoot(root);
+                MatchRuleEngine matchRuleEngine = new MatchRuleEngine(regexTree);
 
-            JSONArray actionExecutorConfig = (JSONArray) jsonObject.get(
-                    ConfigConstants.JSON_NAME_ACTION_EXECUTOR_CONFIGURATION);
-            root.setActionExecutorConfiguration(actionExecutorConfig);
-            for (Object aEObject : actionExecutorConfig) {
-                JSONObject aEJSON = (JSONObject) aEObject;
-                root.addToHashTable(aEJSON.get(ConfigConstants.JSON_NAME_EXECUTOR).toString(),
-                        aEJSON.get(ConfigConstants.JSON_NAME_RELOAD_TIME).toString());
+                log.info("listening to :" + logFileConfig.get(ConfigConstants.JSON_NAME_FILE_PATH));
+
+                Tailer carbonLogTailor = new Tailer((String) logFileConfig.get(ConfigConstants.JSON_NAME_FILE_PATH),
+                        matchRuleEngine, 100, true);
+                carbonLogTailor.start();
             }
 
-            JSONObject logFileConfig = (JSONObject) ((JSONArray) jsonObject.get(
-                    ConfigConstants.JSON_NAME_LOG_FILE_CONFIGURATION)).get(0);
-            ServerProcess.setProcessId((String) logFileConfig.get(ConfigConstants.JSON_NAME_PROCESS_ID_PATH));
-            regexTree.setStartRegex((String) logFileConfig.get(ConfigConstants.JSON_NAME_START_REGEX));
-            regexTree.setEndRegex((String) logFileConfig.get(ConfigConstants.JSON_NAME_END_REGEX));
-
-            MatchRuleEngine matchRuleEngine = new MatchRuleEngine(regexTree);
-
-            log.info("listening to :" + logFileConfig.get(ConfigConstants.JSON_NAME_FILE_PATH));
-
-            Tailer carbonLogTailor = new Tailer((String) logFileConfig.get(ConfigConstants.JSON_NAME_FILE_PATH),
-                    matchRuleEngine, 100, true);
-            carbonLogTailor.start();
-
         } catch (ParseException e) {
-            log.error("parse exception occurred");
+            log.error("Parse exception occurred", e);
         } catch (IOException e) {
-            log.error("IO exception occurred");
+            log.error("IO exception occurred", e);
         }
 //
 //
@@ -93,5 +81,31 @@ public class Application {
 
 //      correlationLogTailor.start();
 
+    }
+
+    private static JSONObject readConfiguration(JSONParser parser, RegexTree regexTree, File configFile)
+            throws IOException, ParseException {
+
+        FileReader jsonFileReader = new FileReader(configFile);
+        JSONObject jsonObject = (JSONObject) parser.parse(jsonFileReader);
+        RegexNode root = regexTree.expandTree(jsonObject);
+
+        regexTree.setRoot(root);
+
+        JSONArray actionExecutorConfig = (JSONArray) jsonObject.get(
+                ConfigConstants.JSON_NAME_ACTION_EXECUTOR_CONFIGURATION);
+        root.setActionExecutorConfiguration(actionExecutorConfig);
+        for (Object aEObject : actionExecutorConfig) {
+            JSONObject aEJSON = (JSONObject) aEObject;
+            root.addToHashTable(aEJSON.get(ConfigConstants.JSON_NAME_EXECUTOR).toString(),
+                    aEJSON.get(ConfigConstants.JSON_NAME_RELOAD_TIME).toString());
+        }
+
+        JSONObject logFileConfig = (JSONObject) ((JSONArray) jsonObject.get(
+                ConfigConstants.JSON_NAME_LOG_FILE_CONFIGURATION)).get(0);
+        ServerProcess.setProcessId((String) logFileConfig.get(ConfigConstants.JSON_NAME_PROCESS_ID_PATH));
+        regexTree.setStartRegex((String) logFileConfig.get(ConfigConstants.JSON_NAME_START_REGEX));
+        regexTree.setEndRegex((String) logFileConfig.get(ConfigConstants.JSON_NAME_END_REGEX));
+        return logFileConfig;
     }
 }
