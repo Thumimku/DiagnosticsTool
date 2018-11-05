@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="OnboardDiagnostics:jar">
-    <output-path>$PROJECT_DIR$/classes/artifacts/OnboardDiagnostics_jar</output-path>
-    <root id="archive" name="OnboardDiagnostics.jar">
-      <element id="module-output" name="OnboardDiagnostics" />
-    </root>
-  </artifact>
-</component>
