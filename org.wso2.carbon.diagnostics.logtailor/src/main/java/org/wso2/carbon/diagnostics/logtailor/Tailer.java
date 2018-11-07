@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 package org.wso2.carbon.diagnostics.logtailor;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -24,7 +25,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.nio.channels.FileChannel;
+
 /**
  * Implementation of the unix "tail -f" functionality, forked from the Apache Commons IO project and providing fixes,
  * cleaner APIs and improved
@@ -68,13 +71,26 @@ public class Tailer extends Thread {
      */
     private volatile boolean run = true;
 
-    private ByteBuffer buffer;
+
+
+    /**
+     * The "truncated" line from buffered reads (when buffer ends prior to reaching eol or eof), as a recycled char array.
+     */
+    private volatile char[] remaind;
+    private volatile int remaindIndex;
 
     /**
      * The recycled buffer for buffered reads.
      */
+    private final byte[] buffer;
 
-    private StringBuffer charBuffer;
+//    private ByteBuffer buffer;
+
+//    /**
+//     * The recycled buffer for buffered reads.
+//     */
+//
+//    private StringBuilder charBuffer;
 
     /**
      * The Tailer position in the file.
@@ -135,10 +151,10 @@ public class Tailer extends Thread {
         this.delay = delay;
         this.end = end;
 
-        this.buffer = ByteBuffer.allocate(bufferSize);
 
-        this.charBuffer = new StringBuffer();
-
+        this.buffer = new byte[bufferSize];
+        this.remaind = new char[bufferSize];
+//        this.remaind = CharBuffer.allocate(bufferSize);
         this.listener = listener;
 
         listener.init(this);
@@ -181,6 +197,7 @@ public class Tailer extends Thread {
                 // Check the file length to see if it was rotated
                 long length = file.length();
 
+
                 boolean shorterLength = length < position;
                 boolean longerLength = length > position;
 
@@ -205,7 +222,7 @@ public class Tailer extends Thread {
                     // The file has more content than it did last time
                     long oldPosition = position;
                     if (fileChannel != null) {
-                        position = readLines(fileChannel);
+                        position = readLines(reader);
                     }
                     // If position is equal to old position but wasn't supposed to be because file seems to be modified
                     // it means file has been rotated but we're not correctly reading it, so force rotation:
@@ -213,11 +230,12 @@ public class Tailer extends Thread {
                         listener.error(new IllegalStateException("Illegal position, try rotating..."));
                         position = Long.MAX_VALUE;
                     }
-                } else {
+                }  else {
                     try {
+
                         Tailer.sleep(delay);
                     } catch (Exception e) {
-                        log.error("Error occurred during thread sleep");
+                        log.error("Error occurred during thread sleep",e);
                     }
                 }
             }
@@ -238,37 +256,37 @@ public class Tailer extends Thread {
         this.run = false;
     }
 
-    /**
-     * Read new lines.
-     *
-     * @param fileChannel The file channel of the file
-     * @return The new position after the lines have been read
-     */
-    private long readLines(FileChannel fileChannel) {
-
-        long read = 0;
-        try {
-            read = fileChannel.read(buffer);
-            buffer.flip();
-            int pos = 0;
-            int size = buffer.remaining();
-            Character charString;
-            while (pos < size) {
-                pos++;
-                charString = (char) buffer.get();
-                charBuffer.append(charString);
-                if (charString.compareTo('\n') == 0) {
-                    listener.handle(charBuffer.toString());
-                    charBuffer = new StringBuffer();
-                }
-            }
-            buffer.clear();
-            return fileChannel.position();
-        } catch (IOException e) {
-            log.error("IOException error occurred. Unable to read the file");
-        }
-        return read;
-    }
+//    /**
+//     * Read new lines.
+//     *
+//     * @param fileChannel The file channel of the file
+//     * @return The new position after the lines have been read
+//     */
+//    private long readLines(FileChannel fileChannel) {
+//
+//        long read = 0;
+//        try {
+//            read = fileChannel.read(buffer);
+//            buffer.flip();
+//            int pos = 0;
+//            int size = buffer.remaining();
+//            Character charString;
+//            while (pos < size) {
+//                pos++;
+//                charString = (char) buffer.get();
+//                charBuffer.append(charString);
+//                if (charString.compareTo('\n') == 0) {
+//                    listener.handle(charBuffer.toString());
+//                    charBuffer = new StringBuilder();
+//                }
+//            }
+//            buffer.clear();
+//            return fileChannel.position();
+//        } catch (IOException e) {
+//            log.error("IOException error occurred. Unable to read the file");
+//        }
+//        return read;
+//    }
 
     private void closeQuietly(Closeable closeable) {
 
@@ -281,14 +299,85 @@ public class Tailer extends Thread {
         }
     }
 
-    public boolean isEnd() {
+//    public boolean isEnd() {
+//
+//        try {
+//            return (!(buffer.hasRemaining()) && ((position + 4096) > (reader.length())));
+//        } catch (IOException e) {
+//            log.error("Error occurred");
+//        }
+//        return false;
+//    }
 
-        try {
-            return (!(buffer.hasRemaining()) && ((position + 4096) > (reader.length())));
-        } catch (IOException e) {
-        log.error("Error occurred");
+
+
+    /**
+     * Read new lines.
+     *
+     * @param reader The file to read
+     * @return The new position after the lines have been read
+     * @throws java.io.IOException if an I/O error occurs.
+     */
+    private long readLines(RandomAccessFile reader) throws IOException {
+        int read = reader.read(buffer);
+        readLinesFromBuffer(read);
+        return reader.getFilePointer();
+    }
+
+    /**
+     * Read lines from the buffer of given size.
+     *
+     * @param size The buffer size.
+     * @throws java.io.IOException if an I/O error occurs.
+     */
+    private void readLinesFromBuffer(int size) throws IOException {
+        int read = readLineFromBuffer(0, size);
+        int pos = read;
+        while (pos < size) {
+            read = readLineFromBuffer(pos, size);
+            pos += read;
         }
-        return false;
+    }
+
+    /**
+     * Buffered read line.
+     *
+     * @param start the buffer starting index.
+     * @param size The buffer size.
+     * @return Number of bytes read.
+     * @throws java.io.IOException if an I/O error occurs.
+     */
+    private int readLineFromBuffer(int start, int size) throws IOException {
+        int read = 0;
+        int current = start;
+        int ch = 0;
+        boolean eol = false;
+        boolean seenCR = false;
+        while (current < size && !eol) {
+            ch = buffer[current++];
+            read++;
+            switch (ch) {
+                case '\n':
+                    eol = true;
+                    remaind[remaindIndex++] = (char) ch;
+                    break;
+                case '\r':
+                    seenCR = true;
+                    break;
+                default:
+                    if (seenCR) {
+                        remaind[remaindIndex++] = '\r';
+                        seenCR = false;
+                    }
+                    remaind[remaindIndex++] = (char) ch; // add character, not its ascii value
+            }
+        }
+        if (eol) {
+
+            listener.handle(new String(remaind, 0, remaindIndex));
+            remaindIndex = 0;
+        }
+        return read;
     }
 
 }

@@ -121,19 +121,20 @@ public class MatchRuleEngine extends TailerListenerAdapter {
                     interpreter.interpret(logLine);
                 }
 
-            } else if (enableTailerCheck) {
-                if (tailer.isEnd()) {
-                    hasEngineApproved = false;
-                    logLine.append(testLine);
-                    if (interpreter != null) {
-                        interpreter.interpret(logLine);
-                    } else {
-                        interpreter = new Interpreter(regexTree);
-                        interpreter.interpret(logLine);
-                    }
-
-                }
             }
+//            else if (enableTailerCheck) {
+//                if (tailer.isEnd()) {
+//                    hasEngineApproved = false;
+//                    logLine.append(testLine);
+//                    if (interpreter != null) {
+//                        interpreter.interpret(logLine);
+//                    } else {
+//                        interpreter = new Interpreter(regexTree);
+//                        interpreter.interpret(logLine);
+//                    }
+//
+//                }
+//            }
 
             //hasEngineApproved remain true
             //current line also error line append it to logLine.

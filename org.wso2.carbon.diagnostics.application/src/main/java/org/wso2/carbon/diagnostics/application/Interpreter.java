@@ -30,7 +30,9 @@ import org.wso2.carbon.diagnostics.regextree.RegexTree;
 
 import java.io.File;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Hashtable;
+import java.util.Timer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -50,15 +52,14 @@ class Interpreter {
     private ActionExecutorFactory actionExecutorFactory; // ActionExecutorFactory to create executor objects
     private String folderpath; // Folder path of the TimeStamp Folder
 
-//    //This HashMap used to map error type and their waiting time
-//    private  HashMap<String, Long> errorTimingMap = new HashMap<>();
-
     private Hashtable<String, Integer> actioexecutorLastTime;
 
     private RegexNode root;
 
     private RegexTree regexTree;
     private int count;
+
+    private Timer timer;
 
     private static Log log = LogFactory.getLog(Interpreter.class);
 
@@ -75,6 +76,7 @@ class Interpreter {
         this.root = regexTree.getRoot();
         actioexecutorLastTime = new Hashtable<>();
         count = 1;
+        timer = new Timer();
 
     }
 
@@ -124,10 +126,20 @@ class Interpreter {
             count++;
             this.createFolder();
             if (this.doAnalysis(diagnosisArray, logLine)) {
+                try {
 
-                this.writeLogLine(logLine);
-                this.executeZipFileExecuter();
-                this.deleteFolder();
+                    timer.schedule(new PostExecuter(logLine,folderpath),new Date(new Date().getTime() + 5000));
+//                    synchronized (this){
+//                        this.wait(2000);
+//                        this.writeLogLine(logLine);
+//                        this.executeZipFileExecuter();
+//                        this.deleteFolder();
+
+
+                } catch (Exception e) {
+                    log.error(e);
+                }
+
             } else {
                 this.deleteFolder();
             }
@@ -225,7 +237,7 @@ class Interpreter {
 
             } catch (SecurityException se) {
                 //handle it
-               log.error(se.getMessage());
+                log.error(se.getMessage());
             }
         }
     }
