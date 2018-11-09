@@ -17,8 +17,8 @@
  */
 package org.wso2.carbon.diagnostics.application;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.wso2.carbon.diagnostics.actionexecutor.ActionExecutor;
@@ -49,6 +49,8 @@ import java.util.regex.Pattern;
  */
 class Interpreter {
 
+    private static Logger log = LoggerFactory.getLogger(Interpreter.class);
+
     private ActionExecutorFactory actionExecutorFactory; // ActionExecutorFactory to create executor objects
     private String folderpath; // Folder path of the TimeStamp Folder
 
@@ -60,8 +62,6 @@ class Interpreter {
     private int count;
 
     private Timer timer;
-
-    private static Log log = LogFactory.getLog(Interpreter.class);
 
     /**
      * public Constructor.
@@ -137,7 +137,7 @@ class Interpreter {
 
 
                 } catch (Exception e) {
-                    log.error(e);
+                    log.error("Could not schedule a task to the timer", e);
                 }
 
             } else {

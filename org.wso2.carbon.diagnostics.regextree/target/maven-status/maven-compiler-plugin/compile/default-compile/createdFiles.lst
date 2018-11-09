@@ -1,2 +1,2 @@
-org/wso2/carbon/diagnostics/regextree/ErrorRegexNode.class
-org/wso2/carbon/diagnostics/regextree/ErrorRegexTree.class
+org/wso2/carbon/diagnostics/regextree/RegexNode.class
+org/wso2/carbon/diagnostics/regextree/RegexTree.class

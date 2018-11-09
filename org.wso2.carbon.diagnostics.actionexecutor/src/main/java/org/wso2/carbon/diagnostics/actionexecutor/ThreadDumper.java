@@ -18,8 +18,9 @@
 
 package org.wso2.carbon.diagnostics.actionexecutor;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.json.simple.JSONObject;
 
 import java.io.File;
@@ -38,7 +39,7 @@ import java.util.Scanner;
  */
 public class ThreadDumper extends ActionExecutor {
 
-    private static Log log = LogFactory.getLog(ThreadDumper.class);
+    private static Logger log = LoggerFactory.getLogger(ThreadDumper.class);
 
     /**
      * This string is used to represent process id.

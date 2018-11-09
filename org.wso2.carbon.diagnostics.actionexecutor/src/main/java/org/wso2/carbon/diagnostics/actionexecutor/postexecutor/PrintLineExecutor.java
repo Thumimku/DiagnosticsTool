@@ -17,8 +17,8 @@
  */
 package org.wso2.carbon.diagnostics.actionexecutor.postexecutor;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * PrintLineExecutor used to print the logLines into the console.
@@ -30,7 +30,8 @@ import org.apache.commons.logging.LogFactory;
  * @author thumilan@wso2.com
  */
 public class PrintLineExecutor {
-    private static Log log = LogFactory.getLog(PrintLineExecutor.class);
+
+    private static Logger log = LoggerFactory.getLogger(PrintLineExecutor.class);
 
     /**
      * public Constructor.
