@@ -17,8 +17,8 @@
  */
 package org.wso2.carbon.diagnostics.actionexecutor;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -32,7 +32,7 @@ import java.util.Scanner;
  */
 public class OpenFileFinder extends ActionExecutor {
 
-    private static Log log = LogFactory.getLog(OpenFileFinder.class);
+    private static Logger log = LoggerFactory.getLogger(OpenFileFinder.class);
 
     /**
      * This string is used to represent process id.
@@ -74,7 +74,6 @@ public class OpenFileFinder extends ActionExecutor {
                     log.error("Unable to do write in file in netstat");
                 }
                 scanner.close();
-
 
             } catch (IOException e) {
                 log.error("Unable to do netstat");

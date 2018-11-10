@@ -17,8 +17,9 @@
  */
 
 package org.wso2.carbon.diagnostics.actionexecutor.postexecutor;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -37,7 +38,7 @@ import java.util.zip.ZipOutputStream;
  */
 public class ZipFileExecutor {
 
-    private static Log log = LogFactory.getLog(ZipFileExecutor.class);
+    private static Logger log = LoggerFactory.getLogger(ZipFileExecutor.class);
 
     /**
      * public Constructor.

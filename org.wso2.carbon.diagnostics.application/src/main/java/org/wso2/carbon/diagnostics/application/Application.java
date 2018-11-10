@@ -18,12 +18,17 @@
 
 package org.wso2.carbon.diagnostics.application;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Options;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.wso2.carbon.diagnostics.actionexecutor.ServerProcess;
 import org.wso2.carbon.diagnostics.application.config.ConfigConstants;
 import org.wso2.carbon.diagnostics.logtailor.Tailer;
@@ -40,18 +45,35 @@ import java.io.IOException;
  */
 public class Application {
 
-    private static final Log log = LogFactory.getLog(Application.class);
-    private static final String CONFIG_FILE_PATH = "/DiagnosticConfig.json";
+    private static final Logger log = LoggerFactory.getLogger(Application.class);
+    private static final String CONFIG_FILE_PATH = "DiagnosticConfig.json";
+    private static final String CMD_OPTION_CONFIG_FILE = "c";
 
     public static void main(String[] args) {
 
         log.info("Diagnostic tool is starting...");
+        Options options = new Options();
 
-        JSONParser parser = new JSONParser();
-        RegexTree regexTree = new RegexTree();
+        options.addOption(CMD_OPTION_CONFIG_FILE, true, "Configuration File");
+
+        String configFilePath = null;
 
         try {
-            File configFile = new File(System.getProperty("user.dir") + CONFIG_FILE_PATH);
+            CommandLineParser cmdParser = new DefaultParser();
+            CommandLine cmd = cmdParser.parse(options, args);
+            if (cmd.hasOption(CMD_OPTION_CONFIG_FILE)) {
+                configFilePath = cmd.getOptionValue(CMD_OPTION_CONFIG_FILE);
+            }
+
+            JSONParser parser = new JSONParser();
+            RegexTree regexTree = new RegexTree();
+
+            File configFile;
+            if (configFilePath != null) {
+                configFile = new File(configFilePath);
+            } else {
+                configFile = new File(Application.class.getClassLoader().getResource(CONFIG_FILE_PATH).getPath());
+            }
             log.info("Reading config file at the location: " + configFile.getAbsolutePath());
             if (!configFile.exists() || !configFile.isFile()) {
                 log.error("Diagnostic configuration does not exists in the path: " + configFile.getAbsolutePath());
@@ -71,7 +93,16 @@ public class Application {
             log.error("Parse exception occurred", e);
         } catch (IOException e) {
             log.error("IO exception occurred", e);
+        } catch (org.apache.commons.cli.ParseException e) {
+            log.error("Unable to detect command line options");
+            printError(options, "command");
         }
+    }
+
+    private static void printError(Options options, String commadName) {
+
+        HelpFormatter formatter = new HelpFormatter();
+        formatter.printHelp(commadName, options);
     }
 
     private static JSONObject readConfiguration(JSONParser parser, RegexTree regexTree, File configFile)

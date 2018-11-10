@@ -17,8 +17,9 @@
  */
 package org.wso2.carbon.diagnostics.actionexecutor;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.wso2.carbon.diagnostics.regextree.RegexNode;
 
 
@@ -29,7 +30,7 @@ import org.wso2.carbon.diagnostics.regextree.RegexNode;
  * @author thumilan@wso2.com
  */
 public class ActionExecutorFactory {
-    private static Log log = LogFactory.getLog(ActionExecutorFactory.class);
+    private static Logger log = LoggerFactory.getLogger(ActionExecutorFactory.class);
     /**
      * This Method used to create Executor objects.
      *

@@ -17,8 +17,9 @@
  */
 package org.wso2.carbon.diagnostics.actionexecutor;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.wso2.carbon.diagnostics.regextree.RegexNode;
 
 import java.io.File;
@@ -34,7 +35,7 @@ import java.io.IOException;
  */
 public class MemoryDumper extends ActionExecutor {
 
-    private static Log log = LogFactory.getLog(MemoryDumper.class);
+    private static Logger log = LoggerFactory.getLogger(MemoryDumper.class);
 
     /**
      * This string is used to represent process id.

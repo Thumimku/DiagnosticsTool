@@ -17,8 +17,9 @@
  */
 
 package org.wso2.carbon.diagnostics.actionexecutor;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -32,7 +33,7 @@ import java.util.Scanner;
  */
 public class NetstatExecuter extends ActionExecutor {
 
-    private static Log log = LogFactory.getLog(NetstatExecuter.class);
+    private static Logger log = LoggerFactory.getLogger(NetstatExecuter.class);
 
     /**
      * Method used to do memory dump with using Java Runtime Environment and jmap command.
@@ -71,7 +72,6 @@ public class NetstatExecuter extends ActionExecutor {
                 } else {
                     log.error("Unable to detect the OS");
                 }
-
 
             } catch (IOException e) {
                 log.error("Unable to do netstat");

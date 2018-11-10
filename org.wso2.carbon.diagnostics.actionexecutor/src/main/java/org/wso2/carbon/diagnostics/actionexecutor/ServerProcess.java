@@ -17,8 +17,8 @@
  */
 package org.wso2.carbon.diagnostics.actionexecutor;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -30,7 +30,7 @@ import java.io.RandomAccessFile;
  */
 public class ServerProcess {
 
-    private static Log log = LogFactory.getLog(ServerProcess.class);
+    private static Logger log = LoggerFactory.getLogger(ServerProcess.class);
     //private process id
     static String processId;
 
@@ -61,7 +61,8 @@ public class ServerProcess {
             file = new RandomAccessFile(path, "r");
             processId = file.readLine();
         } catch (IOException e) {
-            log.error("wso2carbon.pid file is Not Found.");
+            log.error(
+                    "wso2carbon.pid file is Not Found. It is unable to attach to server to take memory dump or introspect the JVM. ");
         }
     }
 
