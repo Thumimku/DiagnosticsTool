@@ -59,13 +59,19 @@ Json file contains Three parts. This file is supposed to to configure the tool t
 
 This regex tree implements following logic.
 ```
-Begin
-If the node is leaf node return the leaf node
-	If <parent_regex> found then check for matching <child_regex>.
-  	[“java.lang” found so check for “threaddeath”, “sqlexception” and “outofmemory”]
-		loop to previous one altering parent node as child node.
-	Else return the node.	
-End
+BEGIN
+
+	IF <parent_regex> OCCURRED THEN CHECK FOR MATCHING <child_regex>.
+  
+		<parent_regex>:- Strings in current node's "Regex" JSON array.
+    
+		<child_regex>:- Strings in "Children" JSON array's "Regex" JSON array.
+    
+	IF MATCH FOUND LOOP TO PREVIOUS ONE ALTERING PARENT NODE AS CHILD NODE.
+  
+	ELSE RETURN DIAGNOSIS JSON  ARRAY
+  
+END
  ```
   
 STRUCTURE
